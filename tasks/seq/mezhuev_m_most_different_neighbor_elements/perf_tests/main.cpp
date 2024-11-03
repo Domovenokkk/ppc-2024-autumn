@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
 #include "core/perf/include/perf.hpp"
-#include "seq/beskhmelnova_k_most_different_neighbor_elements/src/seq.cpp"
+#include "seq/mezhuev_m_most_different_neighbor_elements/src/seq.cpp"
 
-TEST(sequential_beskhmelnova_k_most_different_neighbor_element_perf_test, test_pipeline_run) {
+TEST(sequential_mezhuev_m_most_different_neighbor_element_perf_test, test_pipeline_run) {
   const int count = 10000000;
 
   // Create data
@@ -19,7 +19,7 @@ TEST(sequential_beskhmelnova_k_most_different_neighbor_element_perf_test, test_p
 
   // Create Task
   auto testTaskSequential =
-      std::make_shared<beskhmelnova_k_most_different_neighbor_elements_seq::TestTaskSequential<int>>(taskDataSeq);
+      std::make_shared<mezhuev_m_most_different_neighbor_elements_seq::TestTaskSequential<int>>(taskDataSeq);
 
   // Create Perf attributes
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
@@ -38,12 +38,12 @@ TEST(sequential_beskhmelnova_k_most_different_neighbor_element_perf_test, test_p
   auto perfAnalyzer = std::make_shared<ppc::core::Perf>(testTaskSequential);
   perfAnalyzer->pipeline_run(perfAttr, perfResults);
   ppc::core::Perf::print_perf_statistic(perfResults);
-  int index = testTaskSequential->position_of_first_neighbour_seq(in);
+  int index = testTaskSequential->findLargestNeighborDifferenceIndex(in);
   ASSERT_EQ(in[index], out[0]);
   ASSERT_EQ(in[index + 1], out[1]);
 }
 
-TEST(sequential_beskhmelnova_k_most_different_neighbor_element_perf_test, test_task_run) {
+TEST(sequential_mezhuev_m_most_different_neighbor_element_perf_test, test_task_run) {
   const int count = 10000000;
 
   // Create data
@@ -59,7 +59,7 @@ TEST(sequential_beskhmelnova_k_most_different_neighbor_element_perf_test, test_t
 
   // Create Task
   auto testTaskSequential =
-      std::make_shared<beskhmelnova_k_most_different_neighbor_elements_seq::TestTaskSequential<int>>(taskDataSeq);
+      std::make_shared<mezhuev_m_most_different_neighbor_elements_seq::TestTaskSequential<int>>(taskDataSeq);
 
   // Create Perf attributes
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
