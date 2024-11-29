@@ -28,18 +28,24 @@ bool GridTorusTopologyParallel::pre_processing() {
 }
 
 bool GridTorusTopologyParallel::validation() {
-  if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() || taskData->outputs.empty() ||
-      taskData->outputs_count.empty()) {
+  if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() ||
+      taskData->outputs.empty() || taskData->outputs_count.empty()) {
     return false;
   }
 
   size_t total_input_size = 0;
   for (size_t i = 0; i < taskData->inputs_count.size(); ++i) {
+    if (!taskData->inputs[i] || taskData->inputs_count[i] <= 0) {
+      return false;
+    }
     total_input_size += taskData->inputs_count[i];
   }
 
   size_t total_output_size = 0;
   for (size_t i = 0; i < taskData->outputs_count.size(); ++i) {
+    if (!taskData->outputs[i] || taskData->outputs_count[i] <= 0) {
+      return false;
+    }
     total_output_size += taskData->outputs_count[i];
   }
 
@@ -48,6 +54,10 @@ bool GridTorusTopologyParallel::validation() {
   }
 
   int size = world.size();
+  if (size == 1) {
+    return true;
+  }
+
   int grid_dim = static_cast<int>(std::sqrt(size));
   if (grid_dim * grid_dim != size) {
     return false;
@@ -56,6 +66,7 @@ bool GridTorusTopologyParallel::validation() {
   return true;
 }
 
+
 bool GridTorusTopologyParallel::run() {
   if (!validation()) {
     return false;
@@ -63,6 +74,13 @@ bool GridTorusTopologyParallel::run() {
 
   int rank = world.rank();
   int size = world.size();
+
+  if (size == 1) {
+    
+    std::copy(taskData->inputs[0], taskData->inputs[0] + taskData->inputs_count[0], taskData->outputs[0]);
+    return true;
+  }
+
   int grid_dim = static_cast<int>(std::sqrt(size));
 
   int row = rank / grid_dim;
@@ -73,7 +91,6 @@ bool GridTorusTopologyParallel::run() {
   int up = ((row - 1 + grid_dim) % grid_dim) * grid_dim + col;
   int down = ((row + 1) % grid_dim) * grid_dim + col;
 
-  // Переход к вектору с безопасным копированием данных
   std::vector<uint8_t> send_buffer(taskData->inputs_count[0]);
   std::copy(taskData->inputs[0], taskData->inputs[0] + taskData->inputs_count[0], send_buffer.begin());
 
