@@ -1,5 +1,4 @@
 #include "mpi/mezhuev_m_lattice_torus/include/mpi.hpp"
-
 #include <boost/mpi.hpp>
 #include <cmath>
 #include <iostream>
@@ -18,7 +17,7 @@ bool GridTorusTopologyParallel::pre_processing() {
   }
 
   for (size_t i = 0; i < taskData->inputs.size(); ++i) {
-    if (!taskData->inputs[i] || taskData->inputs_count[i] <= 0) {
+    if (taskData->inputs[i] == nullptr || taskData->inputs_count[i] <= 0) {
       return false;
     }
   }
@@ -35,7 +34,7 @@ bool GridTorusTopologyParallel::validation() {
 
   size_t total_input_size = 0;
   for (size_t i = 0; i < taskData->inputs_count.size(); ++i) {
-    if (!taskData->inputs[i] || taskData->inputs_count[i] <= 0) {
+    if (taskData->inputs[i] == nullptr || taskData->inputs_count[i] <= 0) {
       return false;
     }
     total_input_size += taskData->inputs_count[i];
@@ -43,7 +42,7 @@ bool GridTorusTopologyParallel::validation() {
 
   size_t total_output_size = 0;
   for (size_t i = 0; i < taskData->outputs_count.size(); ++i) {
-    if (!taskData->outputs[i] || taskData->outputs_count[i] <= 0) {
+    if (taskData->outputs[i] == nullptr || taskData->outputs_count[i] <= 0) {
       return false;
     }
     total_output_size += taskData->outputs_count[i];
@@ -59,11 +58,7 @@ bool GridTorusTopologyParallel::validation() {
   }
 
   int grid_dim = static_cast<int>(std::sqrt(size));
-  if (grid_dim * grid_dim != size) {
-    return false;
-  }
-
-  return true;
+  return grid_dim * grid_dim == size;
 }
 
 bool GridTorusTopologyParallel::run() {
@@ -80,7 +75,6 @@ bool GridTorusTopologyParallel::run() {
   }
 
   int grid_dim = static_cast<int>(std::sqrt(size));
-
   int row = rank / grid_dim;
   int col = rank % grid_dim;
 
@@ -133,7 +127,7 @@ bool GridTorusTopologyParallel::post_processing() {
   }
 
   for (size_t i = 0; i < taskData->outputs.size(); ++i) {
-    if (!taskData->outputs[i]) {
+    if (taskData->outputs[i] == nullptr) {
       return false;
     }
 
