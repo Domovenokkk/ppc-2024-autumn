@@ -1,4 +1,4 @@
-#include "C:\Users\Max\Desktop\prog\ppc-2024-autumn\tasks\mpi\mezhuev_m_lattice_torus\include\mpi.hpp"
+#include "mpi/mezhuev_m_lattice_torus/include/mpi.hpp"
 
 #include <boost/mpi.hpp>
 #include <cmath>
@@ -33,7 +33,6 @@ bool GridTorusTopologyParallel::validation() {
     return false;
   }
 
-  // Проверяем соответствие размеров входных и выходных данных
   size_t total_input_size = 0;
   for (size_t i = 0; i < taskData->inputs_count.size(); ++i) {
     total_input_size += taskData->inputs_count[i];
@@ -74,6 +73,7 @@ bool GridTorusTopologyParallel::run() {
   int up = ((row - 1 + grid_dim) % grid_dim) * grid_dim + col;
   int down = ((row + 1) % grid_dim) * grid_dim + col;
 
+  // РџРµСЂРµС…РѕРґ Рє РІРµРєС‚РѕСЂСѓ СЃ Р±РµР·РѕРїР°СЃРЅС‹Рј РєРѕРїРёСЂРѕРІР°РЅРёРµРј РґР°РЅРЅС‹С…
   std::vector<uint8_t> send_buffer(taskData->inputs_count[0]);
   std::copy(taskData->inputs[0], taskData->inputs[0] + taskData->inputs_count[0], send_buffer.begin());
 

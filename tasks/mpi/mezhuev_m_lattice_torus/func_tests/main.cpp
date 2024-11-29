@@ -7,7 +7,7 @@
 #include <numeric>
 #include <vector>
 
-#include "C:\Users\Max\Desktop\prog\ppc-2024-autumn\tasks\mpi\mezhuev_m_lattice_torus\include\mpi.hpp"
+#include "mpi\mezhuev_m_lattice_torus\include\mpi.hpp"
 TEST(mezhuev_m_lattice_torus, InsufficientNodeCount) {
   boost::mpi::communicator world;
 
