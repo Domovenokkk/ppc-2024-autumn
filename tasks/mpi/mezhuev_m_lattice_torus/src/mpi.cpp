@@ -28,7 +28,7 @@ bool GridTorusTopologyParallel::pre_processing() {
 }
 
 bool GridTorusTopologyParallel::validation() {
-  if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() || taskData->outputs.empty() || 
+  if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() || taskData->outputs.empty() ||
       taskData->outputs_count.empty()) {
     return false;
   }
@@ -75,7 +75,6 @@ bool GridTorusTopologyParallel::run() {
   int size = world.size();
 
   if (size == 1) {
-    
     std::copy(taskData->inputs[0], taskData->inputs[0] + taskData->inputs_count[0], taskData->outputs[0]);
     return true;
   }
