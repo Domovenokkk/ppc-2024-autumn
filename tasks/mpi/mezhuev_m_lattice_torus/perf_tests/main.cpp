@@ -92,5 +92,3 @@ TEST(mezhuev_m_lattice_torus, perf_test_task_run) {
     ASSERT_EQ(input_data, output_data);
   }
 }
-
-

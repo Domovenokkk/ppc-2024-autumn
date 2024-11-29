@@ -28,8 +28,8 @@ bool GridTorusTopologyParallel::pre_processing() {
 }
 
 bool GridTorusTopologyParallel::validation() {
-  if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() ||
-      taskData->outputs.empty() || taskData->outputs_count.empty()) {
+  if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() || taskData->outputs.empty() || 
+      taskData->outputs_count.empty()) {
     return false;
   }
 
@@ -65,7 +65,6 @@ bool GridTorusTopologyParallel::validation() {
 
   return true;
 }
-
 
 bool GridTorusTopologyParallel::run() {
   if (!validation()) {
