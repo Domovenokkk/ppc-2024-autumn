@@ -109,8 +109,7 @@ bool GridTorusTopologyParallel::run() {
 
     world.send(down, 3, send_buffer);
     world.recv(down, 3, recv_down);
-  } catch (const boost::mpi::exception& ex) {
-    std::cerr << "MPI exception: " << ex.what() << std::endl;
+  } catch (const boost::mpi::exception&) {
     return false;
   }
 
