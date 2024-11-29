@@ -37,7 +37,7 @@ TEST(mezhuev_m_lattice_torus, perf_test_pipeline_run) {
 
 
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
-  perfAttr->num_running = 10;  
+  perfAttr->num_running = 10;
   const boost::mpi::timer current_timer;
   perfAttr->current_timer = [&] { return current_timer.elapsed(); };
 
@@ -66,7 +66,7 @@ TEST(mezhuev_m_lattice_torus, perf_test_task_run) {
 
   int grid_size = std::sqrt(world.size());
   if (grid_size * grid_size != world.size() || world.size() < 4) {
-    return;  
+    return; 
   }
 
 
@@ -91,7 +91,7 @@ TEST(mezhuev_m_lattice_torus, perf_test_task_run) {
 
 
   auto perfAttr = std::make_shared<ppc::core::PerfAttr>();
-  perfAttr->num_running = 10; 
+  perfAttr->num_running = 10;
   const boost::mpi::timer current_timer;
   perfAttr->current_timer = [&] { return current_timer.elapsed(); };
 
@@ -109,7 +109,7 @@ TEST(mezhuev_m_lattice_torus, perf_test_task_run) {
 
   if (world.rank() == 0) {
     ppc::core::Perf::print_perf_statistic(perfResults);
-    ASSERT_EQ(input_data, output_data);  
+    ASSERT_EQ(input_data, output_data);
   }
 }
 

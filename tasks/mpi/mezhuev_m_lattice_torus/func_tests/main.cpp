@@ -7,7 +7,7 @@
 #include <numeric>
 #include <vector>
 
-#include "mpi\mezhuev_m_lattice_torus\include\mpi.hpp"
+#include "mpi/mezhuev_m_lattice_torus/include/mpi.hpp"
 TEST(mezhuev_m_lattice_torus, InsufficientNodeCount) {
   boost::mpi::communicator world;
 
@@ -297,7 +297,7 @@ TEST(mezhuev_m_lattice_torus, TestHandlingOfUnsupportedDataTypes) {
   boost::mpi::communicator world;
   if (world.size() < 2) return;
 
-  std::vector<float> unsupported_input_data(4);  
+  std::vector<float> unsupported_input_data(4);
   std::iota(unsupported_input_data.begin(), unsupported_input_data.end(), 1.0f);
   std::vector<uint8_t> output_data(4);
 
