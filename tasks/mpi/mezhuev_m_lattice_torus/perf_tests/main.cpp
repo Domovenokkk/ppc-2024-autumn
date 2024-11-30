@@ -7,7 +7,7 @@
 #include "core/perf/include/perf.hpp"
 #include "mpi/mezhuev_m_lattice_torus/include/mpi.hpp"
 
-/*TEST(mezhuev_m_lattice_torus, perf_test_pipeline_run) {
+TEST(mezhuev_m_lattice_torus, perf_test_pipeline_run) {
   boost::mpi::communicator world;
 
   int grid_size = std::sqrt(world.size());
@@ -91,4 +91,4 @@ TEST(mezhuev_m_lattice_torus, perf_test_task_run) {
     ppc::core::Perf::print_perf_statistic(perfResults);
     ASSERT_EQ(input_data, output_data);
   }
-} */
+} 

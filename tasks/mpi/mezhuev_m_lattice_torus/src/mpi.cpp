@@ -13,6 +13,10 @@ bool GridTorusTopologyParallel::pre_processing() {
 }
 
 bool GridTorusTopologyParallel::validation() {
+  if (world.rank() != 0) {
+    return true;
+  }
+
   if (taskData->inputs.empty() || taskData->inputs_count.empty()) {
     return false;
   }
@@ -87,8 +91,6 @@ bool GridTorusTopologyParallel::run() {
 }
 
 
-bool GridTorusTopologyParallel::post_processing() {
-  return true;
-}
+bool GridTorusTopologyParallel::post_processing() { return true; }
 
 }  // namespace mezhuev_m_lattice_torus

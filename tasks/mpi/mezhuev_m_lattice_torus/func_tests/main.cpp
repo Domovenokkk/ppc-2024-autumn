@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "mpi/mezhuev_m_lattice_torus/include/mpi.hpp"
-/* TEST(mezhuev_m_lattice_torus, InsufficientNodeCount) {
+TEST(mezhuev_m_lattice_torus, InsufficientNodeCount) {
   boost::mpi::communicator world;
 
   int total_size = world.size();
@@ -233,4 +233,4 @@ TEST(mezhuev_m_lattice_torus, TestHandlingOfUnsupportedDataTypes) {
   mezhuev_m_lattice_torus::GridTorusTopologyParallel task(task_data);
 
   ASSERT_FALSE(task.validation());
-} */
+} 
