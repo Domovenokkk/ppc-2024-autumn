@@ -61,7 +61,7 @@ bool GridTorusTopologyParallel::validation() {
 bool GridTorusTopologyParallel::run() {
   int rank = world.rank();
   int size = world.size();
-  int grid_dim = std::sqrt(size);
+  int grid_dim = static_cast<int>(std::sqrt(size));
 
   world.barrier();
 
@@ -78,6 +78,7 @@ bool GridTorusTopologyParallel::run() {
   };
 
   auto neighbors = compute_neighbors(rank);
+
   std::vector<uint8_t> send_buffer(taskData->inputs_count[0]);
   std::copy(taskData->inputs[0], taskData->inputs[0] + taskData->inputs_count[0], send_buffer.begin());
 
@@ -91,7 +92,7 @@ bool GridTorusTopologyParallel::run() {
       world.recv(neighbor, 0, recv_buffer);
       combined_buffer.insert(combined_buffer.end(), recv_buffer.begin(), recv_buffer.end());
     } catch (const boost::mpi::exception& ex) {
-      std::cerr << "Error " << neighbor << ": " << ex.what() << std::endl;
+      std::cerr << "Error communicating with neighbor " << neighbor << ": " << ex.what() << std::endl;
       return false;
     }
   }
@@ -99,12 +100,11 @@ bool GridTorusTopologyParallel::run() {
   if (taskData->outputs_count[0] >= combined_buffer.size()) {
     std::copy(combined_buffer.begin(), combined_buffer.end(), taskData->outputs[0]);
   } else {
-    std::cerr << "Error" << std::endl;
+    std::cerr << "Not enough space to store the output data." << std::endl;
     return false;
   }
 
   world.barrier();
-
   return true;
 }
 
