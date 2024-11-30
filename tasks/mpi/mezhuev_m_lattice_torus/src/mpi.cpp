@@ -18,7 +18,7 @@ bool GridTorusTopologyParallel::pre_processing() {
   }
 
   for (size_t i = 0; i < taskData->inputs.size(); ++i) {
-    if (!taskData->inputs[i] || taskData->inputs_count[i] <= 0) {
+    if (taskData->inputs[i] == nullptr || taskData->inputs_count[i] <= 0) {
       return false;
     }
   }
@@ -59,10 +59,8 @@ bool GridTorusTopologyParallel::validation() {
   }
 
   int grid_dim = static_cast<int>(std::sqrt(size));
-  if (grid_dim * grid_dim != size) {
-    return false;
-  }
-  return true;
+  return grid_dim * grid_dim == size;
+
 }
 
 bool GridTorusTopologyParallel::run() {
@@ -132,7 +130,7 @@ bool GridTorusTopologyParallel::post_processing() {
   }
 
   for (size_t i = 0; i < taskData->outputs.size(); ++i) {
-    if (!taskData->outputs[i]) {
+    if (taskData->outputs[i] == nullptr) {
       return false;
     }
 
