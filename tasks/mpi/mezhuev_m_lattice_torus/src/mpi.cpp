@@ -13,6 +13,10 @@ bool GridTorusTopologyParallel::pre_processing() {
 }
 
 bool GridTorusTopologyParallel::validation() {
+  if (world.rank() != 0){
+    return true;
+  }
+  
   if (taskData->inputs.empty() || taskData->inputs_count.empty()) {
     return false;
   }
