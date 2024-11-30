@@ -59,7 +59,10 @@ bool GridTorusTopologyParallel::validation() {
   }
 
   int grid_dim = static_cast<int>(std::sqrt(size));
-  return grid_dim * grid_dim == size;
+  if (grid_dim * grid_dim != size) {
+    return false;
+  }
+  return true;
 }
 
 bool GridTorusTopologyParallel::run() {
@@ -129,7 +132,7 @@ bool GridTorusTopologyParallel::post_processing() {
   }
 
   for (size_t i = 0; i < taskData->outputs.size(); ++i) {
-    if (taskData->outputs[i] == nullptr) {
+    if (!taskData->outputs[i]) {
       return false;
     }
 
@@ -143,4 +146,4 @@ bool GridTorusTopologyParallel::post_processing() {
   return true;
 }
 
-} // namespace mezhuev_m_lattice_torus
+}  // namespace mezhuev_m_lattice_torus
