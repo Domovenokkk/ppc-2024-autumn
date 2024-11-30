@@ -1,4 +1,5 @@
 #include "mpi/mezhuev_m_lattice_torus/include/mpi.hpp"
+
 #include <boost/mpi.hpp>
 #include <cmath>
 #include <iostream>
@@ -8,7 +9,7 @@
 namespace mezhuev_m_lattice_torus {
 
 bool GridTorusTopologyParallel::pre_processing() {
-  if (!taskData) {
+  if (taskData == nullptr) {
     return false;
   }
 
@@ -27,8 +28,8 @@ bool GridTorusTopologyParallel::pre_processing() {
 }
 
 bool GridTorusTopologyParallel::validation() {
-  if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() || taskData->outputs.empty() ||
-      taskData->outputs_count.empty()) {
+  if (taskData == nullptr || taskData->inputs.empty() || taskData->inputs_count.empty() ||
+      taskData->outputs.empty() || taskData->outputs_count.empty()) {
     return false;
   }
 
@@ -75,6 +76,7 @@ bool GridTorusTopologyParallel::run() {
   }
 
   int grid_dim = static_cast<int>(std::sqrt(size));
+
   int row = rank / grid_dim;
   int col = rank % grid_dim;
 
@@ -122,7 +124,7 @@ bool GridTorusTopologyParallel::run() {
 }
 
 bool GridTorusTopologyParallel::post_processing() {
-  if (!taskData) {
+  if (taskData == nullptr) {
     return false;
   }
 
