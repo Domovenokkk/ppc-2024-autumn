@@ -28,36 +28,21 @@ bool GridTorusTopologyParallel::pre_processing() {
 }
 
 bool GridTorusTopologyParallel::validation() {
-  if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() || taskData->outputs.empty() ||
-      taskData->outputs_count.empty()) {
+  if (taskData->inputs.empty() || taskData->inputs_count.empty()) {
     return false;
   }
 
-  size_t total_input_size = 0;
-  for (size_t i = 0; i < taskData->inputs_count.size(); ++i) {
-    if (taskData->inputs[i] == nullptr || taskData->inputs_count[i] <= 0) {
+  for (size_t i = 0; i < taskData->inputs.size(); ++i) {
+    if (taskData->inputs_count[i] <= 0 || taskData->inputs[i] == nullptr) {
       return false;
     }
-    total_input_size += taskData->inputs_count[i];
   }
 
-  size_t total_output_size = 0;
-  for (size_t i = 0; i < taskData->outputs_count.size(); ++i) {
-    if (taskData->outputs[i] == nullptr || taskData->outputs_count[i] <= 0) {
-      return false;
-    }
-    total_output_size += taskData->outputs_count[i];
-  }
-
-  if (total_input_size != total_output_size) {
+  if (taskData->inputs_count[0] != taskData->outputs_count[0]) {
     return false;
   }
 
-  int size = world.size();
-  if (size == 1) {
-    return true;
-  }
-
+  int size = boost::mpi::communicator().size();
   int grid_dim = static_cast<int>(std::sqrt(size));
   return grid_dim * grid_dim == size;
 }
@@ -97,7 +82,8 @@ bool GridTorusTopologyParallel::run() {
 
     world.send(down, 3, send_buffer);
     world.recv(down, 3, recv_down);
-  } catch (const boost::mpi::exception&) {
+  } catch (const boost::mpi::exception& ex) {
+    std::cerr << "MPI exception: " << ex.what() << std::endl;
     return false;
   }
 
@@ -121,7 +107,7 @@ bool GridTorusTopologyParallel::post_processing() {
   }
 
   for (size_t i = 0; i < taskData->outputs.size(); ++i) {
-    if (taskData->outputs[i] == nullptr) {
+    if (!taskData->outputs[i]) {
       return false;
     }
 
@@ -135,4 +121,4 @@ bool GridTorusTopologyParallel::post_processing() {
   return true;
 }
 
-}  // namespace mezhuev_m_lattice_torus 
+}  // namespace mezhuev_m_lattice_torus
