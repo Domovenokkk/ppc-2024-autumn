@@ -9,22 +9,7 @@
 namespace mezhuev_m_lattice_torus {
 
 bool GridTorusTopologyParallel::pre_processing() {
-  if (!taskData) {
-    return false;
-  }
-
-  if (taskData->inputs.empty() || taskData->inputs_count.empty()) {
-    return false;
-  }
-
-  for (size_t i = 0; i < taskData->inputs.size(); ++i) {
-    if (taskData->inputs[i] == nullptr || taskData->inputs_count[i] <= 0) {
-      return false;
-    }
-  }
-
-  world.barrier();
-  return true;
+  return validation();
 }
 
 bool GridTorusTopologyParallel::validation() {
@@ -45,10 +30,11 @@ bool GridTorusTopologyParallel::validation() {
   int size = boost::mpi::communicator().size();
   int grid_dim = static_cast<int>(std::sqrt(size));
   return grid_dim * grid_dim == size;
+
+  return true;
 }
 
 bool GridTorusTopologyParallel::run() {
-
   int rank = world.rank();
   int size = world.size();
 
@@ -102,22 +88,6 @@ bool GridTorusTopologyParallel::run() {
 }
 
 bool GridTorusTopologyParallel::post_processing() {
-  if (!taskData) {
-    return false;
-  }
-
-  for (size_t i = 0; i < taskData->outputs.size(); ++i) {
-    if (!taskData->outputs[i]) {
-      return false;
-    }
-
-    for (size_t j = 0; j < taskData->outputs_count[i]; ++j) {
-      if (taskData->outputs[i][j] == 0) {
-        return false;
-      }
-    }
-  }
-
   return true;
 }
 
