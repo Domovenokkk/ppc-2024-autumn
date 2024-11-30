@@ -95,7 +95,7 @@ bool GridTorusTopologyParallel::run() {
       return false;
     }
   }
- 
+
   if (taskData->outputs_count[0] >= combined_buffer.size()) {
     std::copy(combined_buffer.begin(), combined_buffer.end(), taskData->outputs[0]);
   } else {
