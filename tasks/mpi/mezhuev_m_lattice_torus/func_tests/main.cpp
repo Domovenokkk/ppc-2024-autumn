@@ -233,4 +233,4 @@ TEST(mezhuev_m_lattice_torus, TestHandlingOfUnsupportedDataTypes) {
   mezhuev_m_lattice_torus::GridTorusTopologyParallel task(task_data);
 
   ASSERT_FALSE(task.validation());
-} 
+}

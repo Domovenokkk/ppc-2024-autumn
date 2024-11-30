@@ -91,4 +91,4 @@ TEST(mezhuev_m_lattice_torus, perf_test_task_run) {
     ppc::core::Perf::print_perf_statistic(perfResults);
     ASSERT_EQ(input_data, output_data);
   }
-} 
+}
