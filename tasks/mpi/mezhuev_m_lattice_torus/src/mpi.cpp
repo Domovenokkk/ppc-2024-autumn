@@ -9,7 +9,7 @@
 namespace mezhuev_m_lattice_torus {
 
 bool GridTorusTopologyParallel::pre_processing() {
-  if (taskData == nullptr) {
+  if (!taskData) {
     return false;
   }
 
@@ -18,7 +18,7 @@ bool GridTorusTopologyParallel::pre_processing() {
   }
 
   for (size_t i = 0; i < taskData->inputs.size(); ++i) {
-    if (taskData->inputs[i] == nullptr || taskData->inputs_count[i] <= 0) {
+    if (!taskData->inputs[i] || taskData->inputs_count[i] <= 0) {
       return false;
     }
   }
@@ -28,8 +28,8 @@ bool GridTorusTopologyParallel::pre_processing() {
 }
 
 bool GridTorusTopologyParallel::validation() {
-  if (taskData == nullptr || taskData->inputs.empty() || taskData->inputs_count.empty() ||
-      taskData->outputs.empty() || taskData->outputs_count.empty()) {
+  if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() || taskData->outputs.empty() ||
+      taskData->outputs_count.empty()) {
     return false;
   }
 
@@ -124,7 +124,7 @@ bool GridTorusTopologyParallel::run() {
 }
 
 bool GridTorusTopologyParallel::post_processing() {
-  if (taskData == nullptr) {
+  if (!taskData) {
     return false;
   }
 
@@ -143,4 +143,4 @@ bool GridTorusTopologyParallel::post_processing() {
   return true;
 }
 
-}  // namespace mezhuev_m_lattice_torus
+} // namespace mezhuev_m_lattice_torus
