@@ -86,13 +86,13 @@ bool GridTorusTopologyParallel::run() {
 
   for (int neighbor : neighbors) {
     try {
-        world.send(neighbor, 0, send_buffer);
-        std::vector<uint8_t> recv_buffer(taskData->inputs_count[0]);
-        world.recv(neighbor, 0, recv_buffer);
-        combined_buffer.insert(combined_buffer.end(), recv_buffer.begin(), recv_buffer.end());
+      world.send(neighbor, 0, send_buffer);
+      std::vector<uint8_t> recv_buffer(taskData->inputs_count[0]);
+      world.recv(neighbor, 0, recv_buffer);
+      combined_buffer.insert(combined_buffer.end(), recv_buffer.begin(), recv_buffer.end());
     } catch (const boost::mpi::exception& ex) {
-        std::cerr << "Error " << neighbor << ": " << ex.what() << std::endl;
-        return false;
+      std::cerr << "Error " << neighbor << ": " << ex.what() << std::endl;
+      return false;
     }
   }
  
