@@ -263,3 +263,23 @@ TEST(mezhuev_m_lattice_torus, TestPreProcessingSuccess) {
 
   ASSERT_TRUE(task.pre_processing());
 }
+
+TEST(GridTorusTopologyParallel, RunWithNonSquareNumberOfProcesses) {
+  // Создаем TaskData с корректными данными
+  std::vector<uint8_t> input_data(4, 1);
+  std::vector<uint8_t> output_data(4, 1);
+  auto task_data = std::make_shared<ppc::core::TaskData>();
+  task_data->inputs.emplace_back(input_data.data());
+  task_data->inputs_count.emplace_back(input_data.size());
+  task_data->outputs.emplace_back(output_data.data());
+  task_data->outputs_count.emplace_back(output_data.size());
+
+  // Создаем объект задачи
+  mezhuev_m_lattice_torus::GridTorusTopologyParallel task(task_data);
+
+  // Эмулируем ситуацию, где количество процессов в мире не является квадратом числа.
+  // Для этого потребуется мок или фиктивное окружение MPI, где world.size() возвращает неквадратное число, например, 5.
+
+  // Ожидаем, что функция run вернет false из-за некорректного grid_dim
+  ASSERT_FALSE(task.run());
+}
