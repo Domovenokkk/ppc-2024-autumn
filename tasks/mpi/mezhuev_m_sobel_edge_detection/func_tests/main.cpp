@@ -59,7 +59,7 @@ TEST(mezhuev_m_sobel_edge_detection, MultipleInputBuffers) {
 
   grid_topology.pre_processing();
 
-  EXPECT_EQ(task_data.inputs.size(), 2);
+  EXPECT_EQ(task_data.inputs.size(), static_cast<size_t>(2));
   EXPECT_NE(task_data.inputs[0], nullptr);
   EXPECT_NE(task_data.inputs[1], nullptr);
 
