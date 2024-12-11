@@ -22,7 +22,7 @@ struct TaskData {
 };
 
 class GridTorusTopologyParallel {
-public:
+ public:
   GridTorusTopologyParallel(boost::mpi::communicator& comm) : world(comm) {}
 
   bool pre_processing();
@@ -30,7 +30,7 @@ public:
   bool run();
   bool post_processing();
 
-private:
+ private:
   boost::mpi::communicator& world;
   TaskData* taskData = nullptr;
 };

@@ -30,9 +30,9 @@ bool GridTorusTopologyParallel::validation() {
   bool is_valid = true;
 
   if (world.rank() == 0) {
-    if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() ||
-        taskData->outputs.empty() || taskData->outputs_count.empty()) {
-        is_valid = false;
+    if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() || taskData->outputs.empty() ||
+        taskData->outputs_count.empty()) {
+      is_valid = false;
     }
 
     size_t total_input_size = 0;
@@ -68,11 +68,11 @@ bool GridTorusTopologyParallel::validation() {
 }
 
 bool GridTorusTopologyParallel::run() {
-    int rank = world.rank();
-    int size = world.size();
-    int grid_dim = static_cast<int>(std::sqrt(size));
+  int rank = world.rank();
+  int size = world.size();
+  int grid_dim = static_cast<int>(std::sqrt(size));
 
-    world.barrier();
+  world.barrier();
 
     auto compute_neighbors = [grid_dim](int rank) -> std::vector<int> {
         int x = rank % grid_dim;
@@ -86,56 +86,56 @@ bool GridTorusTopologyParallel::run() {
         return {left, right, up, down};
     };
 
-    auto neighbors = compute_neighbors(rank);
+  auto neighbors = compute_neighbors(rank);
 
-    std::vector<uint8_t> send_buffer(taskData->inputs_count[0]);
-    std::copy(taskData->inputs[0], taskData->inputs[0] + taskData->inputs_count[0], send_buffer.begin());
+  std::vector<uint8_t> send_buffer(taskData->inputs_count[0]);
+  std::copy(taskData->inputs[0], taskData->inputs[0] + taskData->inputs_count[0], send_buffer.begin());
 
-    std::vector<uint8_t> combined_buffer;
-    combined_buffer.reserve(taskData->inputs_count[0] * neighbors.size());
+  std::vector<uint8_t> combined_buffer;
+  combined_buffer.reserve(taskData->inputs_count[0] * neighbors.size());
 
-    for (int neighbor : neighbors) {
-        try {
-            world.send(neighbor, 0, send_buffer);
+  for (int neighbor : neighbors) {
+    try {
+      world.send(neighbor, 0, send_buffer);
 
-            std::vector<uint8_t> recv_buffer(taskData->inputs_count[0]);
-            world.recv(neighbor, 0, recv_buffer);
+      std::vector<uint8_t> recv_buffer(taskData->inputs_count[0]);
+      world.recv(neighbor, 0, recv_buffer);
 
-            combined_buffer.insert(combined_buffer.end(), recv_buffer.begin(), recv_buffer.end());
-        } catch (const boost::mpi::exception& ex) {
-            std::cerr << "MPI Error " << neighbor << ": " << ex.what() << std::endl;
-            return false;
-        }
-    }
-
-    if (taskData->outputs_count[0] >= combined_buffer.size()) {
-        std::copy(combined_buffer.begin(), combined_buffer.end(), taskData->outputs[0]);
-    } else {
+      combined_buffer.insert(combined_buffer.end(), recv_buffer.begin(), recv_buffer.end());
+    } catch (const boost::mpi::exception& ex) {
+        std::cerr << "MPI Error " << neighbor << ": " << ex.what() << std::endl;
         return false;
     }
+  }
 
-    world.barrier();
-    return true;
+  if (taskData->outputs_count[0] >= combined_buffer.size()) {
+    std::copy(combined_buffer.begin(), combined_buffer.end(), taskData->outputs[0]);
+  } else {
+    return false;
+  }
+
+  world.barrier();
+  return true;
 }
 
 bool GridTorusTopologyParallel::post_processing() {
-    if (!taskData) {
+  if (!taskData) {
+    return false;
+  }
+
+  for (size_t i = 0; i < taskData->outputs.size(); ++i) {
+    if (taskData->outputs[i] == nullptr) {
+      return false;
+    }
+
+    for (size_t j = 0; j < taskData->outputs_count[i]; ++j) {
+      if (taskData->outputs[i][j] == 0) {
         return false;
+      }
     }
+  }
 
-    for (size_t i = 0; i < taskData->outputs.size(); ++i) {
-        if (taskData->outputs[i] == nullptr) {
-            return false;
-        }
-
-        for (size_t j = 0; j < taskData->outputs_count[i]; ++j) {
-            if (taskData->outputs[i][j] == 0) {
-                return false;
-            }
-        }
-    }
-
-    return true;
+  return true;
 }
 
 }  // namespace mezhuev_m_sobel_edge_detection
