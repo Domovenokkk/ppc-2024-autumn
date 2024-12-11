@@ -31,7 +31,7 @@ TEST(mezhuev_m_sobel_edge_detection, ValidData) {
   delete[] task_data.outputs[0];
 }
 
-//mistake
+ //mistake
 
 TEST(mezhuev_m_sobel_edge_detection, NullInputBuffer) {
   boost::mpi::communicator world;

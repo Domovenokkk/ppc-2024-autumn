@@ -10,7 +10,7 @@
 
 namespace mezhuev_m_sobel_edge_detection {
 
-TEST(mezhuev_m_sobel_edge_detection_perf, PreProcessingLargeData) {
+TEST(mezhuev_m_sobel_edge_detection, pre_processing_large_dSata) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 
@@ -40,7 +40,7 @@ TEST(mezhuev_m_sobel_edge_detection_perf, PreProcessingLargeData) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection_perf, ValidationLargeData) {
+TEST(mezhuev_m_sobel_edge_detection, validation_large_data) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 
@@ -68,7 +68,7 @@ TEST(mezhuev_m_sobel_edge_detection_perf, ValidationLargeData) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection_perf, RunLargeData) {
+TEST(mezhuev_m_sobel_edge_detection, run_large_data) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 
@@ -97,7 +97,7 @@ TEST(mezhuev_m_sobel_edge_detection_perf, RunLargeData) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection_perf, PostProcessingLargeData) {
+TEST(mezhuev_m_sobel_edge_detection, post_processing_large_data) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 

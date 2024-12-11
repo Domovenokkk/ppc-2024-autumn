@@ -33,7 +33,7 @@ TEST(SobelEdgeDetectionSeqPerfTest, PreProcessingPerformance) {
   delete[] task_data.outputs[0];
 }
 
-//mistake
+ //mistake
 
 TEST(SobelEdgeDetectionSeqPerfTest, PostProcessingPerformance) {
   size_t width = 1920;
