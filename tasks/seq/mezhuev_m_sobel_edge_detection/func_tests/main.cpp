@@ -192,13 +192,8 @@ TEST(SobelEdgeDetectionSeqTest, PostProcessingInvalidValue) {
   task_data.inputs_count.push_back(25);
   task_data.outputs_count.push_back(25);
 
-  task_data.inputs.push_back(new uint8_t[25]{
-    0, 0, 0, 0, 0,
-    0, 255, 255, 255, 0,
-    0, 255, 255, 255, 0,
-    0, 255, 255, 255, 0,
-    0, 0, 0, 0, 0
-  });
+  task_data.inputs.push_back(
+      new uint8_t[25]{0, 0, 0, 0, 0, 0, 255, 255, 255, 0, 0, 255, 255, 255, 0, 0, 255, 255, 255, 0, 0, 0, 0, 0, 0});
   task_data.outputs.push_back(new uint8_t[25]{0});
 
   sobel_edge_detection_seq.setTaskData(&task_data);
@@ -218,13 +213,8 @@ TEST(SobelEdgeDetectionSeqTest, PostProcessingNullOutputBuffer) {
   task_data.inputs_count.push_back(25);
   task_data.outputs_count.push_back(25);
 
-  task_data.inputs.push_back(new uint8_t[25]{
-    0, 0, 0, 0, 0,
-    0, 255, 255, 255, 0,
-    0, 255, 255, 255, 0,
-    0, 255, 255, 255, 0,
-    0, 0, 0, 0, 0
-  });
+  task_data.inputs.push_back(
+      new uint8_t[25]{0, 0, 0, 0, 0, 0, 255, 255, 255, 0, 0, 255, 255, 255, 0, 0, 255, 255, 255, 0, 0, 0, 0, 0, 0});
   task_data.outputs.push_back(nullptr);
 
   sobel_edge_detection_seq.setTaskData(&task_data);

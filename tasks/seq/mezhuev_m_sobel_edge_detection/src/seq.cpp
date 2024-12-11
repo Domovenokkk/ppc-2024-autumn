@@ -19,7 +19,7 @@ bool SobelEdgeDetectionSeq::validation() {
   }
 
   if (taskData->inputs_count.empty() || taskData->outputs_count.empty() ||
-    taskData->inputs_count[0] != taskData->outputs_count[0]) {
+      taskData->inputs_count[0] != taskData->outputs_count[0]) {
     return false;
   }
 
@@ -78,7 +78,7 @@ bool SobelEdgeDetectionSeq::run() {
       if (magnitude > 255) {
         magnitude = 255;
       }
-      
+
       taskData->outputs[0][y * width + x] = static_cast<uint8_t>(magnitude);
     }
   }

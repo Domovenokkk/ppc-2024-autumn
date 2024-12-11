@@ -74,17 +74,17 @@ bool GridTorusTopologyParallel::run() {
 
   world.barrier();
 
-    auto compute_neighbors = [grid_dim](int rank) -> std::vector<int> {
-        int x = rank % grid_dim;
-        int y = rank / grid_dim;
+  auto compute_neighbors = [grid_dim](int rank) -> std::vector<int> {
+    int x = rank % grid_dim;
+    int y = rank / grid_dim;
 
-        int left = (x - 1 + grid_dim) % grid_dim + y * grid_dim;
-        int right = (x + 1) % grid_dim + y * grid_dim;
-        int up = x + ((y - 1 + grid_dim) % grid_dim) * grid_dim;
-        int down = x + ((y + 1) % grid_dim) * grid_dim;
+    int left = (x - 1 + grid_dim) % grid_dim + y * grid_dim;
+    int right = (x + 1) % grid_dim + y * grid_dim;
+    int up = x + ((y - 1 + grid_dim) % grid_dim) * grid_dim;
+    int down = x + ((y + 1) % grid_dim) * grid_dim;
 
-        return {left, right, up, down};
-    };
+    return {left, right, up, down};
+  };
 
   auto neighbors = compute_neighbors(rank);
 
@@ -103,8 +103,8 @@ bool GridTorusTopologyParallel::run() {
 
       combined_buffer.insert(combined_buffer.end(), recv_buffer.begin(), recv_buffer.end());
     } catch (const boost::mpi::exception& ex) {
-        std::cerr << "MPI Error " << neighbor << ": " << ex.what() << std::endl;
-        return false;
+      std::cerr << "MPI Error " << neighbor << ": " << ex.what() << std::endl;
+      return false;
     }
   }
 

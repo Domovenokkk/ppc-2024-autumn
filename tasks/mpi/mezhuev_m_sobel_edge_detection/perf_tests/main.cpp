@@ -58,7 +58,8 @@ TEST(mezhuev_m_sobel_edge_detection_perf, RunScalingProcesses) {
   std::chrono::duration<double> duration = end - start;
 
   if (world.rank() == 0) {
-    std::cout << "Run completed in " << duration.count() << " seconds with " << world.size() << " processes." << std::endl;
+    std::cout << "Run completed in " << duration.count() << " seconds with " << world.size() << " processes." 
+              << std::endl;
   }
 
   EXPECT_NE(task_data.outputs[0][0], 0);
@@ -116,7 +117,8 @@ TEST(mezhuev_m_sobel_edge_detection_perf, GridSizeScaling) {
   std::chrono::duration<double> duration = end - start;
 
   if (world.rank() == 0) {
-    std::cout << "Run with grid scaling completed in " << duration.count() << " seconds for grid size " << grid_factor << "." << std::endl;
+    std::cout << "Run with grid scaling completed in " << duration.count() << " seconds for grid size " << grid_factor << "." 
+              << std::endl;
   }
 
   EXPECT_NE(task_data.outputs[0][0], 0);
