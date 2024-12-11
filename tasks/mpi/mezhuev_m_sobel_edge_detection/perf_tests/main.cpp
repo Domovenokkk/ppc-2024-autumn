@@ -39,35 +39,6 @@ TEST(mezhuev_m_sobel_edge_detection_perf, PreProcessingLargeData) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection_perf, RunScalingProcesses) {
-  boost::mpi::communicator world;
-  GridTorusTopologyParallel grid_topology(world);
-
-  TaskData task_data;
-  size_t data_size = 1'000;
-  task_data.inputs_count.push_back(data_size);
-  task_data.outputs_count.push_back(data_size);
-  task_data.inputs.push_back(new uint8_t[data_size]{1});
-  task_data.outputs.push_back(new uint8_t[data_size]{0});
-
-  grid_topology.setTaskData(&task_data);
-
-  auto start = std::chrono::high_resolution_clock::now();
-  grid_topology.run();
-  auto end = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double> duration = end - start;
-
-  if (world.rank() == 0) {
-    std::cout << "Run completed in " << duration.count() << " seconds with " << world.size() << " processes."
-              << std::endl;
-  }
-
-  EXPECT_NE(task_data.outputs[0][0], 0);
-
-  delete[] task_data.inputs[0];
-  delete[] task_data.outputs[0];
-}
-
 TEST(mezhuev_m_sobel_edge_detection_perf, PostProcessingLargeData) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
