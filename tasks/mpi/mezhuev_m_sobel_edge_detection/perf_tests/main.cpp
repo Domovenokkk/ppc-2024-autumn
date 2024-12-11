@@ -1,11 +1,11 @@
+#include "mpi/mezhuev_m_sobel_edge_detection/include/mpi.hpp"
+
 #include <gtest/gtest.h>
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/environment.hpp>
 #include <chrono>
 #include <vector>
 #include <iostream>
-
-#include "mpi/mezhuev_m_sobel_edge_detection/include/mpi.hpp"
 
 namespace mezhuev_m_sobel_edge_detection {
 

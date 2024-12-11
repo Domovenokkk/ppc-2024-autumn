@@ -1,69 +1,70 @@
 #include "mpi/mezhuev_m_sobel_edge_detection/include/mpi.hpp"
-#include <cmath>
+
 #include <boost/mpi.hpp>
-#include <vector>
+#include <cmath>
 #include <iostream>
+#include <vector>
 
 namespace mezhuev_m_sobel_edge_detection {
 
 bool GridTorusTopologyParallel::pre_processing() {
-    if (!taskData) {
-        return false;
-    }
+  if (!taskData) {
+    return false;
+  }
 
-    size_t num_inputs = taskData->inputs.size();
-    size_t num_outputs = taskData->outputs.size();
+  size_t num_inputs = taskData->inputs.size();
+  size_t num_outputs = taskData->outputs.size();
 
-    for (size_t i = 0; i < num_inputs; ++i) {
-        taskData->inputs[i] = new uint8_t[taskData->inputs_count[i]];
-    }
+  for (size_t i = 0; i < num_inputs; ++i) {
+    taskData->inputs[i] = new uint8_t[taskData->inputs_count[i]];
+  }
 
-    for (size_t i = 0; i < num_outputs; ++i) {
-        taskData->outputs[i] = new uint8_t[taskData->outputs_count[i]];
-    }
+  for (size_t i = 0; i < num_outputs; ++i) {
+    taskData->outputs[i] = new uint8_t[taskData->outputs_count[i]];
+  }
 
-    return true;
+  return true;
 }
 
 bool GridTorusTopologyParallel::validation() {
-    bool is_valid = true;
+  bool is_valid = true;
 
-    if (world.rank() == 0) {
-        if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() ||
-            taskData->outputs.empty() || taskData->outputs_count.empty()) {
-            is_valid = false;
-        }
-
-        size_t total_input_size = 0;
-        for (size_t i = 0; i < taskData->inputs_count.size(); ++i) {
-            if (taskData->inputs[i] == nullptr || taskData->inputs_count[i] <= 0) {
-                is_valid = false;
-            }
-            total_input_size += taskData->inputs_count[i];
-        }
-
-        size_t total_output_size = 0;
-        for (size_t i = 0; i < taskData->outputs_count.size(); ++i) {
-            if (taskData->outputs[i] == nullptr || taskData->outputs_count[i] <= 0) {
-                is_valid = false;
-            }
-            total_output_size += taskData->outputs_count[i];
-        }
-
-        if (total_input_size != total_output_size) {
-            is_valid = false;
-        }
-
-        int size = world.size();
-        int grid_dim = static_cast<int>(std::sqrt(size));
-        if (grid_dim * grid_dim != size) {
-            is_valid = false;
-        }
+  if (world.rank() == 0) {
+    if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() ||
+        taskData->outputs.empty() || taskData->outputs_count.empty()) {
+        is_valid = false;
     }
 
-    bool global_valid;
-    boost::mpi::all_reduce(world, is_valid, global_valid, std::logical_and<>());
-    return global_valid;
+    size_t total_input_size = 0;
+    for (size_t i = 0; i < taskData->inputs_count.size(); ++i) {
+      if (taskData->inputs[i] == nullptr || taskData->inputs_count[i] <= 0) {
+        is_valid = false;
+      }
+      total_input_size += taskData->inputs_count[i];
+    }
+
+    size_t total_output_size = 0;
+    for (size_t i = 0; i < taskData->outputs_count.size(); ++i) {
+      if (taskData->outputs[i] == nullptr || taskData->outputs_count[i] <= 0) {
+        is_valid = false;
+      }
+      total_output_size += taskData->outputs_count[i];
+    }
+
+    if (total_input_size != total_output_size) {
+      is_valid = false;
+    }
+
+    int size = world.size();
+    int grid_dim = static_cast<int>(std::sqrt(size));
+    if (grid_dim * grid_dim != size) {
+      is_valid = false;
+    }
+  }
+
+  bool global_valid;
+  boost::mpi::all_reduce(world, is_valid, global_valid, std::logical_and<>());
+  return global_valid;
 }
 
 bool GridTorusTopologyParallel::run() {
