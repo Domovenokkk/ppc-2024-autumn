@@ -6,11 +6,11 @@
 #include <chrono>
 #include <iostream>
 
-#include "mpi/mezhuev_m_sobel_edge_detection/include/mpi.hpp"
+#include "mpi/mezhuev_m_sobel_edge_detection/include/ops_mpi.hpp"
 
 namespace mezhuev_m_sobel_edge_detection {
 
-TEST(mezhuev_m_sobel_edge_detection, pre_processing_large_dSata) {
+TEST(mezhuev_m_sobel_edge_detection, pre_processing_large_data) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 

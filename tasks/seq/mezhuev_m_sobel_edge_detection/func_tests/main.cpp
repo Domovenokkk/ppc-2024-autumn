@@ -29,7 +29,7 @@ TEST(mezhuev_m_sobel_edge_detection, ValidationTestValidData) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, ValidationTest_NullInputOrOutputBuffer) {
+TEST(mezhuev_m_sobel_edge_detection, validationtest_nullInputOrOutputBuffer) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   SobelEdgeDetectionSeq::TaskData task_data;

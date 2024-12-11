@@ -1,4 +1,4 @@
-#include "mpi/mezhuev_m_sobel_edge_detection/include/mpi.hpp"
+#include "mpi/mezhuev_m_sobel_edge_detection/include/ops_mpi.hpp"
 
 #include <boost/mpi.hpp>
 #include <cmath>

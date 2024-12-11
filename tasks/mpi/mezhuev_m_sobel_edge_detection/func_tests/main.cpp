@@ -8,11 +8,11 @@
 #include <numeric>
 #include <vector>
 
-#include "mpi/mezhuev_m_sobel_edge_detection/include/mpi.hpp"
+#include "mpi/mezhuev_m_sobel_edge_detection/include/ops_mpi.hpp"
 
 namespace mezhuev_m_sobel_edge_detection {
 
-TEST(mezhuev_m_sobel_edge_detection, ValidData) {
+TEST(mezhuev_m_sobel_edge_detection, valid_data) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 
@@ -31,7 +31,7 @@ TEST(mezhuev_m_sobel_edge_detection, ValidData) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, NullInputBuffer) {
+TEST(mezhuev_m_sobel_edge_detection, null_input_buffer) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 
@@ -46,7 +46,7 @@ TEST(mezhuev_m_sobel_edge_detection, NullInputBuffer) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, PostProcessingZeroOutput) {
+TEST(mezhuev_m_sobel_edge_detection, post_processing_zero_output) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 
@@ -59,7 +59,7 @@ TEST(mezhuev_m_sobel_edge_detection, PostProcessingZeroOutput) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, MemoryDeallocation) {
+TEST(mezhuev_m_sobel_edge_detection, memory_deallocation) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 
@@ -85,7 +85,7 @@ TEST(mezhuev_m_sobel_edge_detection, MemoryDeallocation) {
   EXPECT_EQ(task_data.outputs.size(), static_cast<size_t>(0));
 }
 
-TEST(mezhuev_m_sobel_edge_detection, BoundaryConditions) {
+TEST(mezhuev_m_sobel_edge_detection, boundary_conditions) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 
@@ -104,7 +104,7 @@ TEST(mezhuev_m_sobel_edge_detection, BoundaryConditions) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, IncorrectOutputBufferCount) {
+TEST(mezhuev_m_sobel_edge_detection, incorrect_output_buffer_count) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 
@@ -120,7 +120,7 @@ TEST(mezhuev_m_sobel_edge_detection, IncorrectOutputBufferCount) {
   delete[] task_data.inputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, MismatchedInputOutputSizes) {
+TEST(mezhuev_m_sobel_edge_detection, mismatched_input_output_sizes) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
 
