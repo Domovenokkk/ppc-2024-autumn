@@ -63,7 +63,6 @@ TEST(mezhuev_m_sobel_edge_detection, MultipleInputBuffers) {
   EXPECT_NE(task_data.inputs[0], nullptr);
   EXPECT_NE(task_data.inputs[1], nullptr);
 
-
   delete[] task_data.inputs[0];
   delete[] task_data.inputs[1];
   delete[] task_data.outputs[0];
