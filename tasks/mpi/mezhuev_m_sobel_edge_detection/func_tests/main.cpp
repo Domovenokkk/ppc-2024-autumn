@@ -30,21 +30,6 @@ TEST(mezhuev_m_sobel_edge_detection, ValidData) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, NullInputBuffer) {
-  boost::mpi::communicator world;
-  GridTorusTopologyParallel grid_topology(world);
-
-  TaskData task_data;
-  task_data.inputs.push_back(nullptr);
-  task_data.outputs.push_back(new uint8_t[100]{0});
-
-  grid_topology.pre_processing();
-
-  EXPECT_EQ(task_data.inputs[0], nullptr);
-
-  delete[] task_data.outputs[0];
-}
-
 TEST(mezhuev_m_sobel_edge_detection, MultipleInputBuffers) {
   boost::mpi::communicator world;
   GridTorusTopologyParallel grid_topology(world);
@@ -65,6 +50,21 @@ TEST(mezhuev_m_sobel_edge_detection, MultipleInputBuffers) {
 
   delete[] task_data.inputs[0];
   delete[] task_data.inputs[1];
+  delete[] task_data.outputs[0];
+}
+
+TEST(mezhuev_m_sobel_edge_detection, NullInputBuffer) {
+  boost::mpi::communicator world;
+  GridTorusTopologyParallel grid_topology(world);
+
+  TaskData task_data;
+  task_data.inputs.push_back(nullptr);
+  task_data.outputs.push_back(new uint8_t[100]{0});
+
+  grid_topology.pre_processing();
+
+  EXPECT_EQ(task_data.inputs[0], nullptr);
+
   delete[] task_data.outputs[0];
 }
 
