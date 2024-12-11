@@ -117,7 +117,7 @@ TEST(mezhuev_m_sobel_edge_detection_perf, GridSizeScaling) {
   std::chrono::duration<double> duration = end - start;
 
   if (world.rank() == 0) {
-    std::cout << "Run with grid scaling completed in " << duration.count() << " seconds for grid size " << grid_factor 
+    std::cout << "Run with grid scaling completed in " << duration.count() << " seconds for grid size " << grid_factor
               << "." << std::endl;
   }
 
