@@ -8,7 +8,7 @@
 
 namespace mezhuev_m_sobel_edge_detection {
 
-TEST(SobelEdgeDetectionSeqTest, ValidationTestValidData) {
+TEST(SobelEdgeDetectionSeq, ValidationTestValidData) {
   mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
@@ -29,9 +29,7 @@ TEST(SobelEdgeDetectionSeqTest, ValidationTestValidData) {
   delete[] task_data.outputs[0];
 }
 
- //mistake
-
-TEST(SobelEdgeDetectionSeqTest, ValidationTest_NullInputOrOutputBuffer) {
+TEST(SobelEdgeDetectionSeq, ValidationTest_NullInputOrOutputBuffer) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   SobelEdgeDetectionSeq::TaskData task_data;
@@ -47,7 +45,7 @@ TEST(SobelEdgeDetectionSeqTest, ValidationTest_NullInputOrOutputBuffer) {
   delete[] task_data.outputs[0];
 }
 
-TEST(SobelEdgeDetectionSeqTest, ValidationTest_MultipleInputsOrOutputs) {
+TEST(SobelEdgeDetectionSeq, ValidationTest_MultipleInputsOrOutputs) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   SobelEdgeDetectionSeq::TaskData task_data;
@@ -69,7 +67,7 @@ TEST(SobelEdgeDetectionSeqTest, ValidationTest_MultipleInputsOrOutputs) {
   delete[] task_data.outputs[0];
 }
 
-TEST(SobelEdgeDetectionSeqTest, PreProcessingInvalidData) {
+TEST(SobelEdgeDetectionSeq, PreProcessingInvalidData) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   SobelEdgeDetectionSeq::TaskData task_data;
@@ -81,7 +79,7 @@ TEST(SobelEdgeDetectionSeqTest, PreProcessingInvalidData) {
   EXPECT_FALSE(sobel_edge_detection_seq.pre_processing(&task_data));
 }
 
-TEST(SobelEdgeDetectionSeqTest, PreProcessingMismatchedInputsAndOutputs) {
+TEST(SobelEdgeDetectionSeq, PreProcessingMismatchedInputsAndOutputs) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   SobelEdgeDetectionSeq::TaskData task_data;
@@ -101,7 +99,7 @@ TEST(SobelEdgeDetectionSeqTest, PreProcessingMismatchedInputsAndOutputs) {
   delete[] task_data.outputs[0];
 }
 
-TEST(SobelEdgeDetectionSeqTest, PreProcessingNullInputOrOutputBuffer) {
+TEST(SobelEdgeDetectionSeq, PreProcessingNullInputOrOutputBuffer) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   SobelEdgeDetectionSeq::TaskData task_data;
@@ -117,7 +115,7 @@ TEST(SobelEdgeDetectionSeqTest, PreProcessingNullInputOrOutputBuffer) {
   delete[] task_data.outputs[0];
 }
 
-TEST(SobelEdgeDetectionSeqTest, PreProcessingMultipleInputsOrOutputs) {
+TEST(SobelEdgeDetectionSeq, PreProcessingMultipleInputsOrOutputs) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   SobelEdgeDetectionSeq::TaskData task_data;
@@ -139,7 +137,7 @@ TEST(SobelEdgeDetectionSeqTest, PreProcessingMultipleInputsOrOutputs) {
   delete[] task_data.outputs[0];
 }
 
-TEST(SobelEdgeDetectionSeqTest, RunNullInputOrOutputBuffer) {
+TEST(SobelEdgeDetectionSeq, RunNullInputOrOutputBuffer) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   SobelEdgeDetectionSeq::TaskData task_data;
@@ -153,7 +151,7 @@ TEST(SobelEdgeDetectionSeqTest, RunNullInputOrOutputBuffer) {
   EXPECT_FALSE(sobel_edge_detection_seq.run());
 }
 
-TEST(SobelEdgeDetectionSeqTest, PostProcessingInvalidValue) {
+TEST(SobelEdgeDetectionSeq, PostProcessingInvalidValue) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   SobelEdgeDetectionSeq::TaskData task_data;
@@ -174,7 +172,7 @@ TEST(SobelEdgeDetectionSeqTest, PostProcessingInvalidValue) {
   delete[] task_data.outputs[0];
 }
 
-TEST(SobelEdgeDetectionSeqTest, PostProcessingNullOutputBuffer) {
+TEST(SobelEdgeDetectionSeq, PostProcessingNullOutputBuffer) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
   SobelEdgeDetectionSeq::TaskData task_data;

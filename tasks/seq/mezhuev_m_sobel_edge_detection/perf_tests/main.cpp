@@ -8,7 +8,7 @@
 
 namespace mezhuev_m_sobel_edge_detection {
 
-TEST(SobelEdgeDetectionSeqPerfTest, PreProcessingPerformance) {
+TEST(SobelEdgeDetectionSeq, PreProcessingPerformance) {
   size_t width = 1920;
   size_t height = 1080;
 
@@ -33,9 +33,7 @@ TEST(SobelEdgeDetectionSeqPerfTest, PreProcessingPerformance) {
   delete[] task_data.outputs[0];
 }
 
- //mistake
-
-TEST(SobelEdgeDetectionSeqPerfTest, PostProcessingPerformance) {
+TEST(SobelEdgeDetectionSeq, PostProcessingPerformance) {
   size_t width = 1920;
   size_t height = 1080;
 
