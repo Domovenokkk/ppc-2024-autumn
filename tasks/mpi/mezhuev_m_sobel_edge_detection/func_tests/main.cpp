@@ -63,6 +63,7 @@ TEST(mezhuev_m_sobel_edge_detection, MultipleInputBuffers) {
   EXPECT_NE(task_data.inputs[0], nullptr);
   EXPECT_NE(task_data.inputs[1], nullptr);
 
+
   delete[] task_data.inputs[0];
   delete[] task_data.inputs[1];
   delete[] task_data.outputs[0];
@@ -103,8 +104,8 @@ TEST(mezhuev_m_sobel_edge_detection, MemoryDeallocation) {
   task_data.inputs.clear();
   task_data.outputs.clear();
 
-  EXPECT_EQ(task_data.inputs.size(), 0);
-  EXPECT_EQ(task_data.outputs.size(), 0);
+  EXPECT_EQ(task_data.inputs.size(), static_cast<size_t>(0));
+  EXPECT_EQ(task_data.outputs.size(), static_cast<size_t>(0));
 }
 
 TEST(mezhuev_m_sobel_edge_detection, BoundaryConditions) {
@@ -137,7 +138,7 @@ TEST(mezhuev_m_sobel_edge_detection, IncorrectOutputBufferCount) {
 
   grid_topology.pre_processing();
 
-  EXPECT_EQ(task_data.outputs.size(), 0);
+  EXPECT_EQ(task_data.outputs.size(), static_cast<size_t>(0));
 
   delete[] task_data.inputs[0];
 }
@@ -179,8 +180,8 @@ TEST(mezhuev_m_sobel_edge_detection, DoubleMemoryDeallocation) {
   task_data.inputs.clear();
   task_data.outputs.clear();
 
-  EXPECT_EQ(task_data.inputs.size(), 0);
-  EXPECT_EQ(task_data.outputs.size(), 0);
+  EXPECT_EQ(task_data.inputs.size(), static_cast<size_t>(0));
+  EXPECT_EQ(task_data.outputs.size(), static_cast<size_t>(0));
 }
 
 TEST(mezhuev_m_sobel_edge_detection, MPIDistribution) {
@@ -238,8 +239,8 @@ TEST(mezhuev_m_sobel_edge_detection, TaskDataWithoutOutputBuffer) {
 
   grid_topology.pre_processing();
 
-  EXPECT_EQ(task_data.outputs.size(), 0);
-  EXPECT_EQ(task_data.inputs.size(), 1);
+  EXPECT_EQ(task_data.outputs.size(), static_cast<size_t>(0));
+  EXPECT_EQ(task_data.inputs.size(), static_cast<size_t>(1));
 
   delete[] task_data.inputs[0];
 }
@@ -300,7 +301,7 @@ TEST(mezhuev_m_sobel_edge_detection, EmptyInputData) {
 
   grid_topology.pre_processing();
 
-  EXPECT_EQ(task_data.inputs.size(), 0);
+  EXPECT_EQ(task_data.inputs.size(), static_cast<size_t>(0));
   EXPECT_NE(task_data.outputs[0], nullptr);
 
   delete[] task_data.outputs[0];
