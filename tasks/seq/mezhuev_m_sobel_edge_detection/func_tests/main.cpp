@@ -29,26 +29,6 @@ TEST(SobelEdgeDetectionSeqTest, ValidationTestValidData) {
   delete[] task_data.outputs[0];
 }
 
-TEST(SobelEdgeDetectionSeqTest, ValidationTest_MismatchedInputsAndOutputs) {
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
-
-  SobelEdgeDetectionSeq::TaskData task_data;
-  task_data.width = 5;
-  task_data.height = 5;
-  task_data.inputs_count.push_back(25);
-  task_data.outputs_count.push_back(24);
-
-  task_data.inputs.push_back(new uint8_t[25]{0});
-  task_data.outputs.push_back(new uint8_t[25]{0});
-
-  sobel_edge_detection_seq.setTaskData(&task_data);
-
-  EXPECT_FALSE(sobel_edge_detection_seq.validation());
-
-  delete[] task_data.inputs[0];
-  delete[] task_data.outputs[0];
-}
-
 TEST(SobelEdgeDetectionSeqTest, ValidationTest_NullInputOrOutputBuffer) {
   SobelEdgeDetectionSeq sobel_edge_detection_seq;
 

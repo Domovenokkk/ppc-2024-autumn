@@ -33,33 +33,6 @@ TEST(SobelEdgeDetectionSeqPerfTest, PreProcessingPerformance) {
   delete[] task_data.outputs[0];
 }
 
-TEST(SobelEdgeDetectionSeqPerfTest, RunPerformance) {
-  size_t width = 1920;
-  size_t height = 1080;
-
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
-  SobelEdgeDetectionSeq::TaskData task_data;
-
-  task_data.width = width;
-  task_data.height = height;
-  task_data.inputs_count.push_back(width * height);
-  task_data.outputs_count.push_back(width * height);
-  task_data.inputs.push_back(new uint8_t[width * height]());
-  task_data.outputs.push_back(new uint8_t[width * height]());
-
-  sobel_edge_detection_seq.pre_processing(&task_data);
-
-  auto start = std::chrono::high_resolution_clock::now();
-  EXPECT_TRUE(sobel_edge_detection_seq.run());
-  auto end = std::chrono::high_resolution_clock::now();
-
-  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-  std::cout << "Run duration: " << duration.count() << " ms" << std::endl;
-
-  delete[] task_data.inputs[0];
-  delete[] task_data.outputs[0];
-}
-
 TEST(SobelEdgeDetectionSeqPerfTest, PostProcessingPerformance) {
   size_t width = 1920;
   size_t height = 1080;

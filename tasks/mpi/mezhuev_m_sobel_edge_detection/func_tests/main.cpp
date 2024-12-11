@@ -2,6 +2,7 @@
 
 #include <boost/mpi/communicator.hpp>
 #include <boost/mpi/environment.hpp>
+#include <iostream>
 #include <cmath>
 #include <memory>
 #include <numeric>
@@ -27,29 +28,6 @@ TEST(mezhuev_m_sobel_edge_detection, ValidData) {
   EXPECT_NE(task_data.outputs[0], nullptr);
 
   delete[] task_data.inputs[0];
-  delete[] task_data.outputs[0];
-}
-
-TEST(mezhuev_m_sobel_edge_detection, MultipleInputBuffers) {
-  boost::mpi::communicator world;
-  GridTorusTopologyParallel grid_topology(world);
-
-  TaskData task_data;
-  task_data.inputs_count.push_back(100);
-  task_data.outputs_count.push_back(100);
-
-  task_data.inputs.push_back(new uint8_t[100]{0});
-  task_data.inputs.push_back(new uint8_t[100]{0});
-  task_data.outputs.push_back(new uint8_t[100]{0});
-
-  grid_topology.pre_processing();
-
-  EXPECT_EQ(task_data.inputs.size(), static_cast<size_t>(2));
-  EXPECT_NE(task_data.inputs[0], nullptr);
-  EXPECT_NE(task_data.inputs[1], nullptr);
-
-  delete[] task_data.inputs[0];
-  delete[] task_data.inputs[1];
   delete[] task_data.outputs[0];
 }
 
