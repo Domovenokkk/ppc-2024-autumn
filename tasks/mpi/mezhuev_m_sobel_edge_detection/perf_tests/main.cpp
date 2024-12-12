@@ -95,4 +95,4 @@ TEST(GridTorusTopologyParallelPerfTests, ValidationPerformance) {
   delete[] task_data.outputs[0];
 }
 
-} //namespace mezhuev_m_sobel_edge_detection
+}  //namespace mezhuev_m_sobel_edge_detection
