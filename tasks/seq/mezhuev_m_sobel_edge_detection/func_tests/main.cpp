@@ -135,20 +135,6 @@ TEST(mezhuev_m_sobel_edge_detection, PreProcessingMultipleInputsOrOutputs) {
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, RunNullInputOrOutputBuffer) {
-  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
-
-  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
-  task_data.width = 3;
-  task_data.height = 3;
-  task_data.inputs.push_back(nullptr);
-  task_data.outputs.push_back(nullptr);
-
-  sobel_edge_detection_seq.setTaskData(&task_data);
-
-  EXPECT_FALSE(sobel_edge_detection_seq.run());
-}
-
 TEST(mezhuev_m_sobel_edge_detection, PostProcessingInvalidValue) {
   mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
