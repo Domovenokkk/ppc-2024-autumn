@@ -17,7 +17,7 @@ bool SobelEdgeDetectionMPI::validation() {
     return false;
   }
 
-  if (!taskData->inputs[0] || !taskData->outputs[0]) {
+  if (taskData->inputs[0] == nullptr || taskData->outputs[0] == nullptr) {
     return false;
   }
 
@@ -94,19 +94,13 @@ bool SobelEdgeDetectionMPI::post_processing() {
     return false;
   }
 
-  bool valid_output = false;
   for (size_t i = 0; i < taskData->outputs_count[0]; ++i) {
     if (taskData->outputs[0][i] != 0) {
-      valid_output = true;
-      break;
+      return true;
     }
   }
 
-  if (!valid_output) {
-    return false;
-  }
-
-  return true;
+  return false;
 }
 
 }  // namespace mezhuev_m_sobel_edge_detection

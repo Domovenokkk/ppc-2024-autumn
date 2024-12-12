@@ -6,7 +6,7 @@
 namespace mezhuev_m_sobel_edge_detection {
 
 bool SobelEdgeDetectionSeq::validation() {
-  if (!taskData || taskData->inputs.empty() || taskData->outputs.empty()) {
+  if (taskData == nullptr || taskData->inputs.empty() || taskData->outputs.empty()) {
     return false;
   }
 
@@ -14,7 +14,7 @@ bool SobelEdgeDetectionSeq::validation() {
     return false;
   }
 
-  if (!taskData->inputs[0] || !taskData->outputs[0]) {
+  if (taskData->inputs[0] == nullptr || !taskData->outputs[0]) {
     return false;
   }
 
@@ -39,7 +39,7 @@ bool SobelEdgeDetectionSeq::pre_processing(TaskData* task_data) {
 }
 
 bool SobelEdgeDetectionSeq::run() {
-  if (!taskData) {
+  if (taskData == nullptr) {
     return false;
   }
 
@@ -76,7 +76,7 @@ bool SobelEdgeDetectionSeq::run() {
 }
 
 bool SobelEdgeDetectionSeq::post_processing() {
-  if (!taskData || taskData->outputs[0] == nullptr) {
+  if (taskData == nullptr || taskData->outputs[0] == nullptr) {
     std::cerr << "Error: Invalid output buffer." << std::endl;
     return false;
   }
