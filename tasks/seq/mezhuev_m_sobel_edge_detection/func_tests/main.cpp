@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
+
 #include <cmath>
 #include <numeric>
 #include <vector>
+
 #include "seq/mezhuev_m_sobel_edge_detection/include/seq.hpp"
 
 TEST(mezhuev_m_sobel_edge_detection, ValidationTestValidData) {
