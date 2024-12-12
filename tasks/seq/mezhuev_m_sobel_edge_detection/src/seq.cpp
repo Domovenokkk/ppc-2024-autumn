@@ -14,7 +14,7 @@ bool SobelEdgeDetectionSeq::validation() {
     return false;
   }
 
-  if (taskData->inputs[0] == nullptr || !taskData->outputs[0]) {
+  if (taskData->inputs[0] == nullptr || taskData->outputs[0] == nullptr) {
     return false;
   }
 
