@@ -63,7 +63,7 @@ bool SobelEdgeDetectionMPI::run() {
   size_t extra_rows = height % size;
 
   size_t start_row = static_cast<size_t>(rank * rows_per_process + std::min(rank, static_cast<int>(extra_rows)));
-  size_t end_row = 
+  size_t end_row =
       static_cast<size_t>((rank + 1) * rows_per_process + std::min(rank + 1, static_cast<int>(extra_rows)));
 
   for (size_t y = start_row + 1; y < end_row - 1; ++y) {
