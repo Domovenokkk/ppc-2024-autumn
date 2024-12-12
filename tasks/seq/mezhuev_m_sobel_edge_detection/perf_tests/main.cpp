@@ -32,7 +32,7 @@ TEST(mezhuev_m_sobel_edge_detection, PreProcessingPerformance) {
   delete[] task_data.inputs[0];
   delete[] task_data.outputs[0];
 }
-
+ //test
 TEST(mezhuev_m_sobel_edge_detection, PostProcessingPerformance) {
   size_t width = 1920;
   size_t height = 1080;
