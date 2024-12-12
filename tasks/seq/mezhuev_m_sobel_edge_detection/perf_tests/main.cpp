@@ -6,8 +6,6 @@
 
 #include "seq/mezhuev_m_sobel_edge_detection/include/seq.hpp"
 
-namespace mezhuev_m_sobel_edge_detection {
-
 TEST(mezhuev_m_sobel_edge_detection, PreProcessingPerformance) {
   size_t width = 1920;
   size_t height = 1080;
@@ -60,5 +58,3 @@ TEST(mezhuev_m_sobel_edge_detection, PostProcessingPerformance) {
   delete[] task_data.inputs[0];
   delete[] task_data.outputs[0];
 }
-
-}  // namespace mezhuev_m_sobel_edge_detection

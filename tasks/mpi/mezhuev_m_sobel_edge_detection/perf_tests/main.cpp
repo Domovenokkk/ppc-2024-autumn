@@ -37,8 +37,6 @@ TEST(mezhuev_m_sobel_edge_detection, RunPerformance) {
   delete[] task_data.outputs[0];
 }
 
-namespace mezhuev_m_sobel_edge_detection {
-
 TEST(mezhuev_m_sobel_edge_detection, PreProcessingPerformance) {
   boost::mpi::environment env;
   boost::mpi::communicator world;
@@ -94,5 +92,3 @@ TEST(mezhuev_m_sobel_edge_detection, ValidationPerformance) {
   delete[] task_data.inputs[0];
   delete[] task_data.outputs[0];
 }
-
-}  // namespace mezhuev_m_sobel_edge_detection
