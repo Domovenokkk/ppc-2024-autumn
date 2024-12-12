@@ -7,30 +7,30 @@
 #include "mpi/mezhuev_m_sobel_edge_detection/include/ops_mpi.hpp"
 
 TEST(mezhuev_m_sobel_edge_detection, TestPrepareAndCleanupTaskData) {
-  boost::mpi::environment env;
-  boost::mpi::communicator world;
+    boost::mpi::environment env;
+    boost::mpi::communicator world;
 
-  mezhuev_m_sobel_edge_detection::TaskData task_data;
+    mezhuev_m_sobel_edge_detection::TaskData task_data;
 
-  task_data.width = 256;
-  task_data.height = 256;
-  task_data.inputs_count.push_back(task_data.width * task_data.height);
-  task_data.outputs_count.push_back(task_data.width * task_data.height);
-  task_data.inputs.push_back(new uint8_t[task_data.width * task_data.height]());
-  task_data.outputs.push_back(new uint8_t[task_data.width * task_data.height]());
+    task_data.width = 256;
+    task_data.height = 256;
+    task_data.inputs_count.push_back(task_data.width * task_data.height);
+    task_data.outputs_count.push_back(task_data.width * task_data.height);
+    task_data.inputs.push_back(new uint8_t[task_data.width * task_data.height]());
+    task_data.outputs.push_back(new uint8_t[task_data.width * task_data.height]());
 
-  EXPECT_EQ(task_data.width, 256);
-  EXPECT_EQ(task_data.height, 256);
-  EXPECT_EQ(task_data.inputs_count.size(), 1);
-  EXPECT_EQ(task_data.outputs_count.size(), 1);
-  EXPECT_EQ(task_data.inputs.size(), 1);
-  EXPECT_EQ(task_data.outputs.size(), 1);
+    EXPECT_EQ(static_cast<int>(task_data.width), 256);
+    EXPECT_EQ(static_cast<int>(task_data.height), 256);
+    EXPECT_EQ(task_data.inputs_count.size(), 1);
+    EXPECT_EQ(task_data.outputs_count.size(), 1);
+    EXPECT_EQ(task_data.inputs.size(), 1);
+    EXPECT_EQ(task_data.outputs.size(), 1);
 
-  delete[] task_data.inputs[0];
-  delete[] task_data.outputs[0];
+    delete[] task_data.inputs[0];
+    delete[] task_data.outputs[0];
 
-  EXPECT_EQ(task_data.inputs[0], nullptr);
-  EXPECT_EQ(task_data.outputs[0], nullptr);
+    EXPECT_EQ(task_data.inputs[0], nullptr);
+    EXPECT_EQ(task_data.outputs[0], nullptr);
 }
 
 TEST(mezhuev_m_sobel_edge_detection, TestSobelEdgeDetection) {
