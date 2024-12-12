@@ -1,10 +1,12 @@
 #include <gtest/gtest.h>
 
-#include <boost/mpi/environment.hpp>
 #include <boost/mpi/communicator.hpp>
+#include <boost/mpi/environment.hpp>
 #include <chrono>
 
 #include "mpi/mezhuev_m_sobel_edge_detection/include/ops_mpi.hpp"
+
+namespace mezhuev_m_sobel_edge_detection {
 
 TEST(GridTorusTopologyParallelPerfTests, PreProcessingPerformance) {
   boost::mpi::environment env;
@@ -92,3 +94,5 @@ TEST(GridTorusTopologyParallelPerfTests, ValidationPerformance) {
   delete[] task_data.inputs[0];
   delete[] task_data.outputs[0];
 }
+
+} //namespace mezhuev_m_sobel_edge_detection
