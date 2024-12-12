@@ -40,4 +40,3 @@ class SobelEdgeDetectionMPI {
 };
 
 }  // namespace mezhuev_m_sobel_edge_detection
-

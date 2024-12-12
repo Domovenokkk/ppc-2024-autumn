@@ -86,7 +86,6 @@ bool SobelEdgeDetectionMPI::run() {
   return true;
 }
 
-
 bool SobelEdgeDetectionMPI::post_processing() {
   if (taskData == nullptr || taskData->outputs[0] == nullptr) {
     return false;

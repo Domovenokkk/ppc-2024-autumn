@@ -52,8 +52,8 @@ TEST(mezhuev_m_sobel_edge_detection, SobelEdgeDetectionTime) {
       std::chrono::duration<double> duration = end - start;
 
       if (rank == 0) {
-        std::cout << "Edge detection time for image size " << width << "x" << height
-                  << " with " << size << " processes: " << duration.count() << " seconds." << std::endl;
+        std::cout << "Edge detection time for image size " << width << "x" << height << " with " << size
+                  << " processes: " << duration.count() << " seconds." << std::endl;
       }
 
       cleanupTaskData(task_data);
