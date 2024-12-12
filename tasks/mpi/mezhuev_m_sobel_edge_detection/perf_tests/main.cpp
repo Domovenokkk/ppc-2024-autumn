@@ -25,7 +25,6 @@ TEST(mezhuev_m_sobel_edge_detection, RunPerformance) {
   ASSERT_TRUE(grid_topology.validation());
 
   auto start = std::chrono::high_resolution_clock::now();
-  // Передаем task_data в метод run
   ASSERT_TRUE(grid_topology.run(task_data));
   auto end = std::chrono::high_resolution_clock::now();
 
@@ -54,7 +53,7 @@ TEST(mezhuev_m_sobel_edge_detection, PreProcessingPerformance) {
   mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
 
   auto start = std::chrono::high_resolution_clock::now();
-  ASSERT_TRUE(grid_topology.pre_processing(task_data));
+  ASSERT_TRUE(grid_topology.pre_processing());
   auto end = std::chrono::high_resolution_clock::now();
 
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
@@ -79,16 +78,16 @@ TEST(mezhuev_m_sobel_edge_detection, ValidationPerformance) {
 
   mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
 
-  ASSERT_TRUE(grid_topology.pre_processing(task_data));
+  ASSERT_TRUE(grid_topology.pre_processing());
 
   auto start = std::chrono::high_resolution_clock::now();
-  ASSERT_TRUE(grid_topology.validation(task_data));
+  ASSERT_TRUE(grid_topology.validation());
   auto end = std::chrono::high_resolution_clock::now();
 
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   std::cout << "Validation duration: " << duration.count() << " ms" << std::endl;
 
-  ASSERT_TRUE(grid_topology.post_processing(task_data));
+  ASSERT_TRUE(grid_topology.post_processing());
 
   delete[] task_data.inputs[0];
   delete[] task_data.outputs[0];
