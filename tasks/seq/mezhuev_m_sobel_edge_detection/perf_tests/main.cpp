@@ -10,8 +10,9 @@ TEST(mezhuev_m_sobel_edge_detection, PreProcessingPerformance) {
   size_t width = 1920;
   size_t height = 1080;
 
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
+
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
 
   task_data.width = width;
   task_data.height = height;
@@ -21,7 +22,8 @@ TEST(mezhuev_m_sobel_edge_detection, PreProcessingPerformance) {
   task_data.outputs.push_back(new uint8_t[width * height]());
 
   auto start = std::chrono::high_resolution_clock::now();
-  EXPECT_TRUE(sobel_edge_detection_seq.pre_processing(&task_data));
+  bool preprocessing_result = sobel_edge_detection_seq.pre_processing(&task_data);
+  EXPECT_TRUE(preprocessing_result);
   auto end = std::chrono::high_resolution_clock::now();
 
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
@@ -35,8 +37,9 @@ TEST(mezhuev_m_sobel_edge_detection, PostProcessingPerformance) {
   size_t width = 1920;
   size_t height = 1080;
 
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
+
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
 
   task_data.width = width;
   task_data.height = height;
@@ -45,11 +48,12 @@ TEST(mezhuev_m_sobel_edge_detection, PostProcessingPerformance) {
   task_data.inputs.push_back(new uint8_t[width * height]());
   task_data.outputs.push_back(new uint8_t[width * height]());
 
-  sobel_edge_detection_seq.pre_processing(&task_data);
-  sobel_edge_detection_seq.run();
+  EXPECT_TRUE(sobel_edge_detection_seq.pre_processing(&task_data));
+  EXPECT_TRUE(sobel_edge_detection_seq.run());
 
   auto start = std::chrono::high_resolution_clock::now();
-  EXPECT_TRUE(sobel_edge_detection_seq.post_processing());
+  bool postprocessing_result = sobel_edge_detection_seq.post_processing();
+  EXPECT_TRUE(postprocessing_result);
   auto end = std::chrono::high_resolution_clock::now();
 
   auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);

@@ -40,46 +40,35 @@ bool SobelEdgeDetectionSeq::pre_processing(TaskData* task_data) {
 
 bool SobelEdgeDetectionSeq::run() {
   if (!taskData) {
-    std::cerr << "Error: Task data is null." << std::endl;
     return false;
   }
 
   size_t width = taskData->width;
   size_t height = taskData->height;
+  uint8_t* input_image = taskData->inputs[0];
+  uint8_t* output_image = taskData->outputs[0];
 
-  if (taskData->inputs[0] == nullptr || taskData->outputs[0] == nullptr) {
-    std::cerr << "Error: Input or output buffer is null." << std::endl;
-    return false;
-  }
+  gradient_x.resize(width * height, 0);
+  gradient_y.resize(width * height, 0);
+
+  int sobel_x[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+  int sobel_y[3][3] = {{1, 2, 1}, {0, 0, 0}, {-1, -2, -1}};
 
   for (size_t y = 1; y < height - 1; ++y) {
     for (size_t x = 1; x < width - 1; ++x) {
-      int16_t gx = 0, gy = 0;
-
-      gx += -1 * taskData->inputs[0][(y - 1) * width + (x - 1)];
-      gx += 1 * taskData->inputs[0][(y - 1) * width + (x + 1)];
-      gx += -2 * taskData->inputs[0][y * width + (x - 1)];
-      gx += 2 * taskData->inputs[0][y * width + (x + 1)];
-      gx += -1 * taskData->inputs[0][(y + 1) * width + (x - 1)];
-      gx += 1 * taskData->inputs[0][(y + 1) * width + (x + 1)];
-
-      gy += -1 * taskData->inputs[0][(y - 1) * width + (x - 1)];
-      gy += -2 * taskData->inputs[0][(y - 1) * width + x];
-      gy += -1 * taskData->inputs[0][(y - 1) * width + (x + 1)];
-      gy += 1 * taskData->inputs[0][(y + 1) * width + (x - 1)];
-      gy += 2 * taskData->inputs[0][(y + 1) * width + x];
-      gy += 1 * taskData->inputs[0][(y + 1) * width + (x + 1)];
-
-      gradient_x[y * width + x] = gx;
-      gradient_y[y * width + x] = gy;
-
-      int magnitude = std::sqrt(gx * gx + gy * gy);
-
-      if (magnitude > 255) {
-        magnitude = 255;
+      int gx = 0;
+      int gy = 0;
+      
+      for (int ky = -1; ky <= 1; ++ky) {
+        for (int kx = -1; kx <= 1; ++kx) {
+          int pixel_value = input_image[(y + ky) * width + (x + kx)];
+          gx += sobel_x[ky + 1][kx + 1] * pixel_value;
+          gy += sobel_y[ky + 1][kx + 1] * pixel_value;
+        }
       }
 
-      taskData->outputs[0][y * width + x] = static_cast<uint8_t>(magnitude);
+      int magnitude = static_cast<int>(std::sqrt(gx * gx + gy * gy));
+      output_image[y * width + x] = std::min(magnitude, 255);
     }
   }
 
