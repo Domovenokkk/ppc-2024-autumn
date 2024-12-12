@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 namespace mezhuev_m_sobel_edge_detection {
 
@@ -58,10 +59,11 @@ bool SobelEdgeDetectionMPI::run() {
   int sobel_x[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
   int sobel_y[3][3] = {{1, 2, 1}, {0, 0, 0}, {-1, -2, -1}};
 
-  int rows_per_process = height / size;
-  int extra_rows = height % size;
-  int start_row = rank * rows_per_process + std::min(rank, extra_rows);
-  int end_row = (rank + 1) * rows_per_process + std::min(rank + 1, extra_rows);
+  size_t rows_per_process = height / size;
+  size_t extra_rows = height % size;
+
+  size_t start_row = static_cast<size_t>(rank * rows_per_process + std::min(rank, static_cast<int>(extra_rows)));
+  size_t end_row = static_cast<size_t>((rank + 1) * rows_per_process + std::min(rank + 1, static_cast<int>(extra_rows)));
 
   for (size_t y = start_row + 1; y < end_row - 1; ++y) {
     for (size_t x = 1; x < width - 1; ++x) {
