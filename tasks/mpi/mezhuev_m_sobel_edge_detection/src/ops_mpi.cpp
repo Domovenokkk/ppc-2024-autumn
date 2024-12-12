@@ -1,10 +1,10 @@
 #include "mpi/mezhuev_m_sobel_edge_detection/include/ops_mpi.hpp"
 
+#include <algorithm>
 #include <boost/mpi.hpp>
 #include <cmath>
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 namespace mezhuev_m_sobel_edge_detection {
 
@@ -63,7 +63,8 @@ bool SobelEdgeDetectionMPI::run() {
   size_t extra_rows = height % size;
 
   size_t start_row = static_cast<size_t>(rank * rows_per_process + std::min(rank, static_cast<int>(extra_rows)));
-  size_t end_row = static_cast<size_t>((rank + 1) * rows_per_process + std::min(rank + 1, static_cast<int>(extra_rows)));
+  size_t end_row = 
+      static_cast<size_t>((rank + 1) * rows_per_process + std::min(rank + 1, static_cast<int>(extra_rows)));
 
   for (size_t y = start_row + 1; y < end_row - 1; ++y) {
     for (size_t x = 1; x < width - 1; ++x) {
