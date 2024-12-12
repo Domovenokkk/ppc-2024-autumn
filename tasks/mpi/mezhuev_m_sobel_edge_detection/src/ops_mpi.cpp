@@ -7,136 +7,101 @@
 
 namespace mezhuev_m_sobel_edge_detection {
 
-bool GridTorusTopologyParallel::pre_processing() {
-  if (!taskData) {
+bool SobelEdgeDetectionMPI::validation() {
+  if (taskData == nullptr || taskData->inputs.empty() || taskData->outputs.empty()) {
     return false;
   }
 
-  size_t num_inputs = taskData->inputs.size();
-  size_t num_outputs = taskData->outputs.size();
-
-  for (size_t i = 0; i < num_inputs; ++i) {
-    taskData->inputs[i] = new uint8_t[taskData->inputs_count[i]];
+  if (taskData->inputs.size() != 1 || taskData->outputs.size() != 1) {
+    return false;
   }
 
-  for (size_t i = 0; i < num_outputs; ++i) {
-    taskData->outputs[i] = new uint8_t[taskData->outputs_count[i]];
+  if (!taskData->inputs[0] || !taskData->outputs[0]) {
+    return false;
+  }
+
+  if (taskData->inputs_count.empty() || taskData->outputs_count.empty() ||
+      taskData->inputs_count[0] != taskData->outputs_count[0]) {
+    return false;
   }
 
   return true;
 }
 
-bool GridTorusTopologyParallel::validation() {
-  bool is_valid = true;
-
-  if (world.rank() == 0) {
-    if (!taskData || taskData->inputs.empty() || taskData->inputs_count.empty() || taskData->outputs.empty() ||
-        taskData->outputs_count.empty()) {
-      is_valid = false;
-    }
-
-    size_t total_input_size = 0;
-    for (size_t i = 0; i < taskData->inputs_count.size(); ++i) {
-      if (taskData->inputs[i] == nullptr || taskData->inputs_count[i] <= 0) {
-        is_valid = false;
-      }
-      total_input_size += taskData->inputs_count[i];
-    }
-
-    size_t total_output_size = 0;
-    for (size_t i = 0; i < taskData->outputs_count.size(); ++i) {
-      if (taskData->outputs[i] == nullptr || taskData->outputs_count[i] <= 0) {
-        is_valid = false;
-      }
-      total_output_size += taskData->outputs_count[i];
-    }
-
-    if (total_input_size != total_output_size) {
-      is_valid = false;
-    }
-
-    int size = world.size();
-    int grid_dim = static_cast<int>(std::sqrt(size));
-    if (grid_dim * grid_dim != size) {
-      is_valid = false;
-    }
+bool SobelEdgeDetectionMPI::pre_processing(TaskData* task_data) {
+  if (!validation()) {
+    return false;
   }
 
-  bool global_valid;
-  boost::mpi::all_reduce(world, is_valid, global_valid, std::logical_and<>());
-  return global_valid;
+  taskData = task_data;
+  gradient_x.resize(taskData->width * taskData->height);
+  gradient_y.resize(taskData->width * taskData->height);
+
+  taskData->outputs[0] = new uint8_t[taskData->width * taskData->height]();
+
+  return true;
 }
 
-bool GridTorusTopologyParallel::run(mezhuev_m_sobel_edge_detection::TaskData& task_data) {
+bool SobelEdgeDetectionMPI::run() {
+  if (taskData == nullptr) {
+    return false;
+  }
+
   int rank = world.rank();
   int size = world.size();
-  int grid_dim = static_cast<int>(std::sqrt(size));
+  size_t width = taskData->width;
+  size_t height = taskData->height;
 
-  world.barrier();
+  uint8_t* input_image = taskData->inputs[0];
+  uint8_t* output_image = taskData->outputs[0];
 
-  auto compute_neighbors = [grid_dim](int rank) -> std::vector<int> {
-    int x = rank % grid_dim;
-    int y = rank / grid_dim;
+  int sobel_x[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+  int sobel_y[3][3] = {{1, 2, 1}, {0, 0, 0}, {-1, -2, -1}};
 
-    int left = (x - 1 + grid_dim) % grid_dim + y * grid_dim;
-    int right = (x + 1) % grid_dim + y * grid_dim;
-    int up = x + ((y - 1 + grid_dim) % grid_dim) * grid_dim;
-    int down = x + ((y + 1) % grid_dim) * grid_dim;
+  int rows_per_process = height / size;
+  int extra_rows = height % size;
+  int start_row = rank * rows_per_process + std::min(rank, extra_rows);
+  int end_row = (rank + 1) * rows_per_process + std::min(rank + 1, extra_rows);
 
-    std::vector<int> neighbors = {left, right, up, down};
+  for (size_t y = start_row + 1; y < end_row - 1; ++y) {
+    for (size_t x = 1; x < width - 1; ++x) {
+      int gx = 0;
+      int gy = 0;
 
-    neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), rank), neighbors.end());
+      for (int ky = -1; ky <= 1; ++ky) {
+        for (int kx = -1; kx <= 1; ++kx) {
+          int pixel_value = input_image[(y + ky) * width + (x + kx)];
+          gx += sobel_x[ky + 1][kx + 1] * pixel_value;
+          gy += sobel_y[ky + 1][kx + 1] * pixel_value;
+        }
+      }
 
-    return neighbors;
-  };
-
-  auto neighbors = compute_neighbors(rank);
-
-  std::vector<uint8_t> send_buffer(task_data.inputs_count[0]);
-  std::copy(task_data.inputs[0], task_data.inputs[0] + task_data.inputs_count[0], send_buffer.begin());
-
-  std::vector<uint8_t> combined_buffer;
-  combined_buffer.reserve(task_data.inputs_count[0] * neighbors.size());
-
-  for (int neighbor : neighbors) {
-    try {
-      world.send(neighbor, 0, send_buffer);
-
-      std::vector<uint8_t> recv_buffer(task_data.inputs_count[0]);
-      world.recv(neighbor, 0, recv_buffer);
-
-      combined_buffer.insert(combined_buffer.end(), recv_buffer.begin(), recv_buffer.end());
-    } catch (const boost::mpi::exception& ex) {
-      std::cerr << "MPI Error " << neighbor << ": " << ex.what() << std::endl;
-      return false;
+      int magnitude = static_cast<int>(std::sqrt(gx * gx + gy * gy));
+      output_image[y * width + x] = std::min(magnitude, 255);
     }
   }
 
-  if (task_data.outputs_count[0] >= combined_buffer.size()) {
-    std::copy(combined_buffer.begin(), combined_buffer.end(), task_data.outputs[0]);
-  } else {
-    return false;
-  }
-
   world.barrier();
+
   return true;
 }
 
-bool GridTorusTopologyParallel::post_processing() {
-  if (!taskData) {
+
+bool SobelEdgeDetectionMPI::post_processing() {
+  if (taskData == nullptr || taskData->outputs[0] == nullptr) {
     return false;
   }
 
-  for (size_t i = 0; i < taskData->outputs.size(); ++i) {
-    if (taskData->outputs[i] == nullptr) {
-      return false;
+  bool valid_output = false;
+  for (size_t i = 0; i < taskData->outputs_count[0]; ++i) {
+    if (taskData->outputs[0][i] != 0) {
+      valid_output = true;
+      break;
     }
+  }
 
-    for (size_t j = 0; j < taskData->outputs_count[i]; ++j) {
-      if (taskData->outputs[i][j] == 0) {
-        return false;
-      }
-    }
+  if (!valid_output) {
+    return false;
   }
 
   return true;

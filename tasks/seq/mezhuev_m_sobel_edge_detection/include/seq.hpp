@@ -15,7 +15,7 @@ class SobelEdgeDetectionSeq {
     size_t height;
   };
 
-  SobelEdgeDetectionSeq() : taskData(nullptr) {}
+  SobelEdgeDetectionSeq() = default;
 
   TaskData* getTaskData() { return taskData; }
 
@@ -27,7 +27,7 @@ class SobelEdgeDetectionSeq {
   bool post_processing();
 
  private:
-  TaskData* taskData;
+  TaskData* taskData = nullptr;
   std::vector<int16_t> gradient_x;
   std::vector<int16_t> gradient_y;
 };

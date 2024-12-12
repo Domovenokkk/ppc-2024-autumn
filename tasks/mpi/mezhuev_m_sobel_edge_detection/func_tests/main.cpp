@@ -11,224 +11,219 @@
 
 #include "mpi/mezhuev_m_sobel_edge_detection/include/ops_mpi.hpp"
 
-TEST(mezhuev_m_sobel_edge_detection, PreProcessingValidData) {
-  boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
-
-  mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.inputs_count.push_back(100);
-  task_data.outputs_count.push_back(100);
-  task_data.inputs.push_back(new uint8_t[100]{0});
-  task_data.outputs.push_back(new uint8_t[100]{0});
-
-  grid_topology.pre_processing();
-
-  EXPECT_NE(task_data.inputs[0], nullptr);
-  EXPECT_NE(task_data.outputs[0], nullptr);
-
-  delete[] task_data.inputs[0];
-  delete[] task_data.outputs[0];
-}
-
 TEST(mezhuev_m_sobel_edge_detection, PreProcessingInvalidData) {
   boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
 
   mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.inputs_count.push_back(100);
-  task_data.outputs_count.push_back(100);
   task_data.inputs.push_back(nullptr);
-  task_data.outputs.push_back(new uint8_t[100]{0});
+  task_data.outputs.push_back(new uint8_t[10000]{0});
+  task_data.inputs_count.push_back(1);
+  task_data.outputs_count.push_back(1);
 
-  EXPECT_FALSE(grid_topology.pre_processing());
+  EXPECT_FALSE(sobel_edge_detection.pre_processing(&task_data));
 
   delete[] task_data.outputs[0];
 }
 
 TEST(mezhuev_m_sobel_edge_detection, PostProcessingInvalidData) {
   boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
 
   mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.outputs_count.push_back(100);
-  task_data.outputs.push_back(new uint8_t[100]{0});
+  task_data.outputs.push_back(nullptr);
+  task_data.outputs_count.push_back(1);
 
-  EXPECT_FALSE(grid_topology.post_processing());
-
-  delete[] task_data.outputs[0];
+  EXPECT_FALSE(sobel_edge_detection.post_processing());
 }
 
-TEST(mezhuev_m_sobel_edge_detection, PostProcessingWithoutOutputs) {
+TEST(mezhuev_m_sobel_edge_detection, ValidationWithEmptyData) {
   boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
 
   mezhuev_m_sobel_edge_detection::TaskData task_data;
+  task_data.inputs.push_back(nullptr);
+  task_data.outputs.push_back(nullptr);
+  task_data.inputs_count.push_back(0);
   task_data.outputs_count.push_back(0);
 
-  EXPECT_FALSE(grid_topology.post_processing());
-}
-
-TEST(mezhuev_m_sobel_edge_detection, PostProcessingWithNullData) {
-  boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
-
-  mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.outputs_count.push_back(100);
-  task_data.outputs.push_back(nullptr);
-
-  EXPECT_FALSE(grid_topology.post_processing());
-}
-
-TEST(mezhuev_m_sobel_edge_detection, PostProcessingNullOutputBuffer) {
-  boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
-
-  mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.outputs_count.push_back(100);
-  task_data.outputs.push_back(nullptr);
-
-  grid_topology.pre_processing();
-
-  EXPECT_FALSE(grid_topology.post_processing());
-}
-
-TEST(mezhuev_m_sobel_edge_detection, PostProcessingZeroInOutput) {
-  boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
-
-  mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.outputs_count.push_back(100);
-  uint8_t* output_data = new uint8_t[100]{255};
-  output_data[10] = 0;
-  task_data.outputs.push_back(output_data);
-
-  grid_topology.pre_processing();
-
-  EXPECT_FALSE(grid_topology.post_processing());
-
-  delete[] task_data.outputs[0];
+  EXPECT_FALSE(sobel_edge_detection.validation());
 }
 
 TEST(mezhuev_m_sobel_edge_detection, PostProcessingEmptyOutput) {
   boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
 
   mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.outputs_count.push_back(0);
   task_data.outputs.push_back(new uint8_t[0]);
-
-  grid_topology.pre_processing();
-
-  EXPECT_FALSE(grid_topology.post_processing());
-
-  delete[] task_data.outputs[0];
-}
-
-TEST(mezhuev_m_sobel_edge_detection, post_processing_zero_output) {
-  boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
-
-  mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.outputs_count.push_back(100);
-  task_data.outputs.push_back(new uint8_t[100]{0});
-
-  EXPECT_FALSE(grid_topology.post_processing());  // Ожидаем, что не произойдет завершение
-
-  delete[] task_data.outputs[0];
-}
-
-TEST(mezhuev_m_sobel_edge_detection, memory_deallocation) {
-  boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
-
-  mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.inputs_count.push_back(100);
-  task_data.outputs_count.push_back(100);
-  task_data.inputs.push_back(new uint8_t[100]{0});
-  task_data.outputs.push_back(new uint8_t[100]{0});
-
-  grid_topology.pre_processing();
-
-  for (size_t i = 0; i < task_data.inputs.size(); ++i) {
-    delete[] task_data.inputs[i];
-  }
-  for (size_t i = 0; i < task_data.outputs.size(); ++i) {
-    delete[] task_data.outputs[i];
-  }
-
-  task_data.inputs.clear();
-  task_data.outputs.clear();
-
-  EXPECT_EQ(task_data.inputs.size(), static_cast<size_t>(0));
-  EXPECT_EQ(task_data.outputs.size(), static_cast<size_t>(0));
-}
-
-TEST(mezhuev_m_sobel_edge_detection, boundary_conditions) {
-  boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
-
-  mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.inputs_count.push_back(1);
   task_data.outputs_count.push_back(1);
-  task_data.inputs.push_back(new uint8_t[1]{128});
-  task_data.outputs.push_back(new uint8_t[1]{0});
 
-  grid_topology.pre_processing();
+  EXPECT_FALSE(sobel_edge_detection.post_processing());
 
-  EXPECT_EQ(task_data.inputs[0][0], 128);
-  EXPECT_EQ(task_data.outputs[0][0], 0);
+  delete[] task_data.outputs[0];
+}
+
+TEST(mezhuev_m_sobel_edge_detection, PostProcessingZeroOutput) {
+  boost::mpi::communicator world;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
+
+  mezhuev_m_sobel_edge_detection::TaskData task_data;
+  task_data.outputs.push_back(new uint8_t[10000]{0});
+  task_data.outputs_count.push_back(10000);
+
+  EXPECT_FALSE(sobel_edge_detection.post_processing());
+
+  delete[] task_data.outputs[0];
+}
+
+TEST(mezhuev_m_sobel_edge_detection, PreProcessingInvalidInputCount) {
+  boost::mpi::communicator world;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
+
+  mezhuev_m_sobel_edge_detection::TaskData task_data;
+  task_data.inputs.push_back(new uint8_t[10000]{0});
+  task_data.outputs.push_back(new uint8_t[10000]{0});
+  task_data.inputs_count.push_back(1);
+  task_data.outputs_count.push_back(10000);
+
+  EXPECT_FALSE(sobel_edge_detection.pre_processing(&task_data));
 
   delete[] task_data.inputs[0];
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, incorrect_output_buffer_count) {
+TEST(mezhuev_m_sobel_edge_detection, PreProcessingInvalidDimensions) {
   boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
 
   mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.inputs_count.push_back(100);
-  task_data.outputs_count.push_back(0);
-  task_data.inputs.push_back(new uint8_t[100]{0});
+  task_data.inputs.push_back(new uint8_t[10000]{0});
+  task_data.outputs.push_back(new uint8_t[10000]{0});
+  task_data.inputs_count.push_back(10000);
+  task_data.outputs_count.push_back(10000);
+  task_data.width = 0;
+  task_data.height = 100;
 
-  grid_topology.pre_processing();
-
-  EXPECT_EQ(task_data.outputs.size(), static_cast<size_t>(0));
+  EXPECT_FALSE(sobel_edge_detection.pre_processing(&task_data));
 
   delete[] task_data.inputs[0];
+  delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, EmptyInputData) {
+TEST(mezhuev_m_sobel_edge_detection, PreProcessingEmptyImage) {
   boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
 
   mezhuev_m_sobel_edge_detection::TaskData task_data;
+  task_data.inputs.push_back(new uint8_t[0]);
+  task_data.outputs.push_back(new uint8_t[0]);
   task_data.inputs_count.push_back(0);
-  task_data.outputs_count.push_back(100);
-  task_data.outputs.push_back(new uint8_t[100]{0});
+  task_data.outputs_count.push_back(0);
+  task_data.width = 0;
+  task_data.height = 0;
 
-  grid_topology.pre_processing();
+  EXPECT_FALSE(sobel_edge_detection.pre_processing(&task_data));
 
-  EXPECT_EQ(task_data.inputs.size(), static_cast<size_t>(0));
-  EXPECT_NE(task_data.outputs[0], nullptr);
+  delete[] task_data.inputs[0];
+  delete[] task_data.outputs[0];
+}
+
+TEST(mezhuev_m_sobel_edge_detection, PreProcessingEmptyInputAndOutput) {
+  boost::mpi::communicator world;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
+
+  mezhuev_m_sobel_edge_detection::TaskData task_data;
+  task_data.inputs.push_back(nullptr);
+  task_data.outputs.push_back(nullptr);
+  task_data.inputs_count.push_back(0);
+  task_data.outputs_count.push_back(0);
+  task_data.width = 0;
+  task_data.height = 0;
+
+  EXPECT_FALSE(sobel_edge_detection.pre_processing(&task_data));
+}
+
+TEST(mezhuev_m_sobel_edge_detection, InvalidDataBetweenProcesses) {
+  boost::mpi::communicator world;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
+
+  mezhuev_m_sobel_edge_detection::TaskData task_data;
+  task_data.inputs.push_back(new uint8_t[10000]{0});
+  task_data.outputs.push_back(new uint8_t[10000]{0});
+  task_data.inputs_count.push_back(10000);
+  task_data.outputs_count.push_back(5000);  // Ошибка в количестве данных для выходных данных
+  task_data.width = 100;
+  task_data.height = 100;
+
+  EXPECT_FALSE(sobel_edge_detection.pre_processing(&task_data));
+
+  delete[] task_data.inputs[0];
+  delete[] task_data.outputs[0];
+}
+
+TEST(mezhuev_m_sobel_edge_detection, InvalidImageDimensions) {
+  boost::mpi::communicator world;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
+
+  mezhuev_m_sobel_edge_detection::TaskData task_data;
+  task_data.inputs.push_back(new uint8_t[10000]{0});
+  task_data.outputs.push_back(new uint8_t[10000]{0});
+  task_data.inputs_count.push_back(10000);
+  task_data.outputs_count.push_back(10000);
+  task_data.width = 1;  // Недопустимая ширина изображения
+  task_data.height = 100;
+
+  EXPECT_FALSE(sobel_edge_detection.pre_processing(&task_data));
+
+  delete[] task_data.inputs[0];
+  delete[] task_data.outputs[0];
+}
+
+TEST(mezhuev_m_sobel_edge_detection, NullPointerInputData) {
+  boost::mpi::communicator world;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
+
+  mezhuev_m_sobel_edge_detection::TaskData task_data;
+  task_data.inputs.push_back(nullptr);  // Пустой указатель на входные данные
+  task_data.outputs.push_back(new uint8_t[10000]{0});
+  task_data.inputs_count.push_back(10000);
+  task_data.outputs_count.push_back(10000);
+
+  EXPECT_FALSE(sobel_edge_detection.pre_processing(&task_data));
 
   delete[] task_data.outputs[0];
 }
 
-TEST(mezhuev_m_sobel_edge_detection, SinglePixelProcessing) {
+TEST(mezhuev_m_sobel_edge_detection, NullPointerOutputData) {
   boost::mpi::communicator world;
-  mezhuev_m_sobel_edge_detection::GridTorusTopologyParallel grid_topology(world);
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
 
   mezhuev_m_sobel_edge_detection::TaskData task_data;
-  task_data.inputs_count.push_back(1);
-  task_data.outputs_count.push_back(1);
-  task_data.inputs.push_back(new uint8_t[1]{255});
-  task_data.outputs.push_back(new uint8_t[1]{0});
+  task_data.inputs.push_back(new uint8_t[10000]{0});
+  task_data.outputs.push_back(nullptr);
+  task_data.inputs_count.push_back(10000);
+  task_data.outputs_count.push_back(10000);
 
-  grid_topology.pre_processing();
+  EXPECT_FALSE(sobel_edge_detection.pre_processing(&task_data));
 
-  EXPECT_EQ(task_data.inputs[0][0], 255);
-  EXPECT_EQ(task_data.outputs[0][0], 0);
+  delete[] task_data.inputs[0];
+}
+
+TEST(mezhuev_m_sobel_edge_detection, InvalidProcessingData) {
+  boost::mpi::communicator world;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionMPI sobel_edge_detection(world);
+
+  mezhuev_m_sobel_edge_detection::TaskData task_data;
+  task_data.inputs.push_back(new uint8_t[10000]{0});
+  task_data.outputs.push_back(new uint8_t[10000]{0});
+  task_data.inputs_count.push_back(10000);
+  task_data.outputs_count.push_back(10000);
+  task_data.width = 100;
+  task_data.height = 100;
+
+  std::fill(task_data.inputs[0], task_data.inputs[0] + 10000, 255);
+
+  EXPECT_FALSE(sobel_edge_detection.run());
 
   delete[] task_data.inputs[0];
   delete[] task_data.outputs[0];
