@@ -1,12 +1,8 @@
 #include <gtest/gtest.h>
-
 #include <cmath>
 #include <numeric>
 #include <vector>
-
 #include "seq/mezhuev_m_sobel_edge_detection/include/seq.hpp"
-
-namespace mezhuev_m_sobel_edge_detection {
 
 TEST(mezhuev_m_sobel_edge_detection, ValidationTestValidData) {
   mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
@@ -30,9 +26,9 @@ TEST(mezhuev_m_sobel_edge_detection, ValidationTestValidData) {
 }
 
 TEST(mezhuev_m_sobel_edge_detection, validationtest_nullInputOrOutputBuffer) {
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
   task_data.width = 5;
   task_data.height = 5;
   task_data.inputs.push_back(nullptr);
@@ -46,9 +42,9 @@ TEST(mezhuev_m_sobel_edge_detection, validationtest_nullInputOrOutputBuffer) {
 }
 
 TEST(mezhuev_m_sobel_edge_detection, ValidationTest_MultipleInputsOrOutputs) {
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
   task_data.width = 5;
   task_data.height = 5;
   task_data.inputs_count.push_back(25);
@@ -68,9 +64,9 @@ TEST(mezhuev_m_sobel_edge_detection, ValidationTest_MultipleInputsOrOutputs) {
 }
 
 TEST(mezhuev_m_sobel_edge_detection, PreProcessingInvalidData) {
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
   task_data.width = 5;
   task_data.height = 5;
 
@@ -80,9 +76,9 @@ TEST(mezhuev_m_sobel_edge_detection, PreProcessingInvalidData) {
 }
 
 TEST(mezhuev_m_sobel_edge_detection, PreProcessingMismatchedInputsAndOutputs) {
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
   task_data.width = 5;
   task_data.height = 5;
   task_data.inputs_count.push_back(25);
@@ -100,9 +96,9 @@ TEST(mezhuev_m_sobel_edge_detection, PreProcessingMismatchedInputsAndOutputs) {
 }
 
 TEST(mezhuev_m_sobel_edge_detection, PreProcessingNullInputOrOutputBuffer) {
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
   task_data.width = 5;
   task_data.height = 5;
   task_data.inputs.push_back(nullptr);
@@ -116,9 +112,9 @@ TEST(mezhuev_m_sobel_edge_detection, PreProcessingNullInputOrOutputBuffer) {
 }
 
 TEST(mezhuev_m_sobel_edge_detection, PreProcessingMultipleInputsOrOutputs) {
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
   task_data.width = 5;
   task_data.height = 5;
   task_data.inputs_count.push_back(25);
@@ -138,9 +134,9 @@ TEST(mezhuev_m_sobel_edge_detection, PreProcessingMultipleInputsOrOutputs) {
 }
 
 TEST(mezhuev_m_sobel_edge_detection, RunNullInputOrOutputBuffer) {
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
   task_data.width = 3;
   task_data.height = 3;
   task_data.inputs.push_back(nullptr);
@@ -152,9 +148,9 @@ TEST(mezhuev_m_sobel_edge_detection, RunNullInputOrOutputBuffer) {
 }
 
 TEST(mezhuev_m_sobel_edge_detection, PostProcessingInvalidValue) {
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
   task_data.width = 5;
   task_data.height = 5;
   task_data.inputs_count.push_back(25);
@@ -173,9 +169,9 @@ TEST(mezhuev_m_sobel_edge_detection, PostProcessingInvalidValue) {
 }
 
 TEST(mezhuev_m_sobel_edge_detection, PostProcessingNullOutputBuffer) {
-  SobelEdgeDetectionSeq sobel_edge_detection_seq;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq sobel_edge_detection_seq;
 
-  SobelEdgeDetectionSeq::TaskData task_data;
+  mezhuev_m_sobel_edge_detection::SobelEdgeDetectionSeq::TaskData task_data;
   task_data.width = 5;
   task_data.height = 5;
   task_data.inputs_count.push_back(25);
@@ -191,5 +187,3 @@ TEST(mezhuev_m_sobel_edge_detection, PostProcessingNullOutputBuffer) {
 
   delete[] task_data.inputs[0];
 }
-
-}  // namespace mezhuev_m_sobel_edge_detection

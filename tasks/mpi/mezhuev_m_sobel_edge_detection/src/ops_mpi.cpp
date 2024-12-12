@@ -67,7 +67,7 @@ bool GridTorusTopologyParallel::validation() {
   return global_valid;
 }
 
-bool GridTorusTopologyParallel::run() {
+bool GridTorusTopologyParallel::run(mezhuev_m_sobel_edge_detection::TaskData& task_data) {
   int rank = world.rank();
   int size = world.size();
   int grid_dim = static_cast<int>(std::sqrt(size));
@@ -83,22 +83,26 @@ bool GridTorusTopologyParallel::run() {
     int up = x + ((y - 1 + grid_dim) % grid_dim) * grid_dim;
     int down = x + ((y + 1) % grid_dim) * grid_dim;
 
-    return {left, right, up, down};
+    std::vector<int> neighbors = {left, right, up, down};
+
+    neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), rank), neighbors.end());
+
+    return neighbors;
   };
 
   auto neighbors = compute_neighbors(rank);
 
-  std::vector<uint8_t> send_buffer(taskData->inputs_count[0]);
-  std::copy(taskData->inputs[0], taskData->inputs[0] + taskData->inputs_count[0], send_buffer.begin());
+  std::vector<uint8_t> send_buffer(task_data.inputs_count[0]);
+  std::copy(task_data.inputs[0], task_data.inputs[0] + task_data.inputs_count[0], send_buffer.begin());
 
   std::vector<uint8_t> combined_buffer;
-  combined_buffer.reserve(taskData->inputs_count[0] * neighbors.size());
+  combined_buffer.reserve(task_data.inputs_count[0] * neighbors.size());
 
   for (int neighbor : neighbors) {
     try {
       world.send(neighbor, 0, send_buffer);
 
-      std::vector<uint8_t> recv_buffer(taskData->inputs_count[0]);
+      std::vector<uint8_t> recv_buffer(task_data.inputs_count[0]);
       world.recv(neighbor, 0, recv_buffer);
 
       combined_buffer.insert(combined_buffer.end(), recv_buffer.begin(), recv_buffer.end());
@@ -108,8 +112,8 @@ bool GridTorusTopologyParallel::run() {
     }
   }
 
-  if (taskData->outputs_count[0] >= combined_buffer.size()) {
-    std::copy(combined_buffer.begin(), combined_buffer.end(), taskData->outputs[0]);
+  if (task_data.outputs_count[0] >= combined_buffer.size()) {
+    std::copy(combined_buffer.begin(), combined_buffer.end(), task_data.outputs[0]);
   } else {
     return false;
   }

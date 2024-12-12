@@ -27,7 +27,7 @@ class GridTorusTopologyParallel {
 
   bool pre_processing();
   bool validation();
-  bool run();
+  bool run(TaskData& taskData);
   bool post_processing();
 
  private:
