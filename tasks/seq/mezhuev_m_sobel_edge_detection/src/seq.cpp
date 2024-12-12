@@ -58,7 +58,7 @@ bool SobelEdgeDetectionSeq::run() {
     for (size_t x = 1; x < width - 1; ++x) {
       int gx = 0;
       int gy = 0;
-      
+
       for (int ky = -1; ky <= 1; ++ky) {
         for (int kx = -1; kx <= 1; ++kx) {
           int pixel_value = input_image[(y + ky) * width + (x + kx)];
