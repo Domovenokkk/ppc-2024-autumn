@@ -1,7 +1,7 @@
 #include "seq/mezhuev_m_most_different_neighbor_elements_seq/include/seq.hpp"
 
-#include <cmath>
 #include <algorithm>
+#include <cmath>
 #include <stdexcept>
 
 namespace mezhuev_m_most_different_neighbor_elements {

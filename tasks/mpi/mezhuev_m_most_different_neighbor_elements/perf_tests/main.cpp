@@ -5,7 +5,6 @@
 #include <chrono>
 
 #include "core/perf/include/perf.hpp"
-
 #include "mpi/mezhuev_m_most_different_neighbor_elements/include/mpi.hpp"
 
 TEST(mezhuev_m_most_different_neighbor_elements, SmallDataTest) {
