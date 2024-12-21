@@ -14,10 +14,10 @@
 
 namespace mezhuev_m_most_different_neighbor_elements {
 
-class MostDifferentNeighborElements : public ppc::core::Task {  // Исправлено: добавлен ":" перед "public"
+class MostDifferentNeighborElements : public ppc::core::Task {
  public:
   MostDifferentNeighborElements(boost::mpi::communicator& world_, std::shared_ptr<ppc::core::TaskData> taskData_)
-      : Task(std::move(taskData_)), world(world_) {}  // Используйте std::move для передачи shared_ptr
+      : Task(std::move(taskData_)), world(world_) {}
 
   bool pre_processing() override;
   bool validation() override;
