@@ -96,11 +96,12 @@ TEST(mezhuev_m_most_different_neighbor_elements, ResultResizedCorrectly) {
   std::vector<int> input = {7, 8, 9};
   taskData->inputs.push_back(reinterpret_cast<uint8_t*>(input.data()));
   taskData->inputs_count.push_back(static_cast<uint32_t>(input.size()));
+
   auto task = mezhuev_m_most_different_neighbor_elements::MostDifferentNeighborElements(taskData);
+
   EXPECT_FALSE(task.validation());
   ASSERT_TRUE(task.pre_processing());
-
-  EXPECT_EQ(task.getResult().size(), 2);
+  EXPECT_EQ(task.getResult().size(), static_cast<size_t>(2));
 }
 
 TEST(mezhuev_m_most_different_neighbor_elements, TwoElements) {
